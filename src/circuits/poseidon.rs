@@ -87,6 +87,24 @@ mod tests {
 
     use super::PoseidonCircuit;
 
+    fn convert_hash_u64_to_u32(hash_u64: [u64; 4]) -> [u32; 8] {
+        let mut res = Vec::new();
+        for num in hash_u64 {
+            let res_u32 = convert_u64_to_u32_BE(num);
+            res.push(res_u32[0]);
+            res.push(res_u32[1]);
+        }
+
+        res.try_into().unwrap()
+    }
+
+    fn convert_u64_to_u32_BE(input: u64) -> [u32; 2] {
+        let lower = input as u32;
+        let upper = (input >> 32) as u32;
+
+        [upper, lower]
+    }
+
     #[test]
     fn test() {
         let k = 8;
@@ -103,9 +121,18 @@ mod tests {
         let output = poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init().hash(message);
 
         println!("output Fp: {:?}", output);
+        println!("output Fp: {:?}", format!("{:?}", output));
         println!("output u128: {:?}", output.get_lower_128());
         println!("output bits: {:?}", output.to_le_bits());
-
+        println!(
+            "output bits raw slice: {:?}",
+            output.to_le_bits().as_raw_slice()
+        );
+        println!(
+            "output bits raw slice u32: {:?}",
+            convert_hash_u64_to_u32(output.to_le_bits().as_raw_slice().try_into().unwrap())
+        );
+        let output_le_bits2 = output.to_le_bits();
         let output_le_bits = output.to_le_bits().as_raw_slice();
 
         let test_fp = Fp::from_raw([1, 3, 4, 5]);

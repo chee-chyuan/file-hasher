@@ -18,6 +18,7 @@ rand_core = {version = "0.6", default-features = false, features = ["getrandom"]
 sha2 = "0.10.6"
 tabbycat = {version = "0.1", features = ["attributes"], optional = true}
 ff = "0.12"
+bitvec = "1.0.1"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
