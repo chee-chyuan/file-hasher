@@ -252,7 +252,17 @@ impl<const L: usize> Circuit<Fp> for FileHashPartialCircuit<L> {
 #[cfg(test)]
 mod tests {
     use halo2_gadgets::poseidon::primitives::{self as poseidon, ConstantLength, P128Pow5T3};
-    use halo2_proofs::{circuit::Value, dev::MockProver, pasta::Fp};
+    use halo2_proofs::{
+        circuit::Value,
+        dev::MockProver,
+        pasta::{EqAffine, Fp},
+        plonk::{create_proof, keygen_pk, keygen_vk, verify_proof, SingleVerifier},
+        poly::commitment::Params,
+        transcript::{Blake2bRead, Blake2bWrite, Challenge255},
+    };
+    use rand_core::OsRng;
+
+    use crate::utils::poseidon::convert_hash_u32_to_u64;
 
     use super::FileHashPartialCircuit;
 
@@ -329,6 +339,131 @@ mod tests {
         let pub_instance = vec![accumulator_hash, row_accumulator];
         let prover = MockProver::run(k, &circuit, vec![pub_instance]).unwrap();
         prover.assert_satisfied();
+    }
+
+    #[test]
+    fn test_real_prover() {
+        let row_selector = [Fp::from(1), Fp::from(0)];
+
+        let row_title_u32 = [
+            1803989619, 4281662689, 2641068110, 4284104535, 1202562282, 2720996681, 3223212765,
+            3079101259,
+        ];
+        let row_content_u32 = row_title_u32.clone();
+
+        let row_title_u64 = convert_hash_u32_to_u64(row_title_u32);
+        let row_content_u64 = convert_hash_u32_to_u64(row_content_u32);
+
+        let row_title = row_title_u64.map(|x| return Fp::from(x));
+        let row_content = row_content_u64.map(|x| return Fp::from(x));
+
+        let row_title = [row_title, row_title];
+        let row_content = [row_content, row_content];
+
+        let circuit = FileHashPartialCircuit::<2> {
+            row_title: row_title.map(|x| x.map(|y| Value::known(y))),
+            row_content: row_content.map(|x| x.map(|y| Value::known(y))),
+            row_selectors: row_selector.map(|x| Value::known(x)),
+        };
+
+        let mut row_hash = Vec::new();
+        let mut row_accumulator = Fp::zero();
+        for ((&title, &content), &row_selector) in row_title
+            .iter()
+            .zip(row_content.iter())
+            .zip(row_selector.iter())
+        {
+            let title_message_1 = [title[0], title[1]];
+            let title_message_2 = [title[2], title[3]];
+
+            let title_message_1_output =
+                poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init()
+                    .hash(title_message_1);
+            let title_message_2_output =
+                poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init()
+                    .hash(title_message_2);
+            let title_hash = poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init()
+                .hash([title_message_1_output, title_message_2_output]);
+
+            let content_message_1 = [content[0], content[1]];
+            let content_message_2 = [content[2], content[3]];
+
+            let content_message_1_output =
+                poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init()
+                    .hash(content_message_1);
+            let content_message_2_output =
+                poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init()
+                    .hash(content_message_2);
+            let content_hash = poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init()
+                .hash([content_message_1_output, content_message_2_output]);
+            let message = [title_hash, content_hash];
+            let output =
+                poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init().hash(message);
+
+            row_hash.push(output);
+
+            if row_selector == Fp::one() {
+                row_accumulator += output;
+            }
+        }
+        let mut accumulator_hash = poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init()
+            .hash([row_hash[0], row_hash[1]]);
+
+        for i in 2..row_content.len() {
+            let message = [accumulator_hash, row_hash[i]];
+            let output =
+                poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init().hash(message);
+            accumulator_hash = output;
+        }
+
+        println!("accumulator_hash: {:?}", accumulator_hash);
+        println!("row_accumulator: {:?}", row_accumulator);
+
+        let public_input = vec![accumulator_hash, row_accumulator];
+        const ROW_NUMBER: usize = 2;
+        let circuit = FileHashPartialCircuit::<ROW_NUMBER> {
+            row_title: row_title.map(|x| x.map(|y| Value::known(y))),
+            row_content: row_content.map(|x| x.map(|y| Value::known(y))),
+            row_selectors: row_selector.map(|x| Value::known(x)),
+        };
+
+        let empty_circuit = FileHashPartialCircuit::<ROW_NUMBER> {
+            row_title: [[Value::unknown(); 4]; ROW_NUMBER],
+            row_content: [[Value::unknown(); 4]; ROW_NUMBER],
+            row_selectors: [Value::unknown(); ROW_NUMBER],
+        };
+
+        let k = 10;
+        let params: Params<EqAffine> = Params::new(k);
+
+        let vk = keygen_vk(&params, &empty_circuit).expect("keygen_vk should not fail");
+        let pk = keygen_pk(&params, vk, &empty_circuit).expect("keygen_pk should not fail");
+
+        let mut transcript = Blake2bWrite::<_, _, Challenge255<_>>::init(vec![]);
+        // Create a proof
+        create_proof(
+            &params,
+            &pk,
+            &[circuit.clone(), circuit.clone()],
+            &[&[&public_input[..]], &[&public_input[..]]],
+            OsRng,
+            &mut transcript,
+        )
+        .expect("proof generation should not fail");
+        let proof: Vec<u8> = transcript.finalize();
+
+        println!("proof: {:?}", proof);
+
+        let strategy = SingleVerifier::new(&params);
+        let mut transcript = Blake2bRead::<_, _, Challenge255<_>>::init(&proof[..]);
+        assert!(verify_proof(
+            &params,
+            pk.get_vk(),
+            strategy,
+            &[&[&public_input[..]], &[&public_input[..]]],
+            &mut transcript,
+        )
+        .is_ok());
     }
 
     #[cfg(feature = "dev-graph")]
