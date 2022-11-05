@@ -355,16 +355,7 @@ async function testAllFlow() {
     proof
   );
 
-  console.log(`verifyResult : ${verifyResult}`)
-
-
-  const verifyResult2 = multiThread.verify_correct_selector(
-    fileCommitmentU32,
-    selectedRowU32,
-    testProof
-  );
-
-  console.log(`verifyResult2 : ${verifyResult2}`)
+  console.log(`verifyResult : ${verifyResult}`);
 }
 
 const convertSha256HexToU64 = (hash: string) => {

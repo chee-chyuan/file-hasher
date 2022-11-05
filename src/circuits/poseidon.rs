@@ -105,6 +105,56 @@ mod tests {
         [upper, lower]
     }
 
+    fn convert_hash_u32_to_u64(hash_u32: [u32; 8]) -> [u64; 4] {
+        let mut res = Vec::new();
+        for i in 0..4 {
+            let starting_index = i * 2;
+            let arr = [hash_u32[starting_index], hash_u32[starting_index + 1]];
+            let res_u64 = convert_u32_to_u64_BE(arr);
+            res.push(res_u64);
+        }
+
+        res.reverse();
+        res.try_into().unwrap()
+    }
+
+    fn convert_u32_to_u64_BE(u32_array: [u32; 2]) -> u64 {
+        u32_array[0] as u64 * u64::pow(2, 32) + u32_array[1] as u64
+    }
+
+    fn convert_u32_to_u64_LE(u32_array: [u32; 2]) -> u64 {
+        u32_array[1] as u64 * u64::pow(2, 32) + u32_array[0] as u64
+    }
+
+    #[test]
+    fn test_convert() {
+        let accumulator_hash_u32_array = [
+            959998726, 1176928140, 2469259582, 869520868, 3033159345, 8350713, 1483177508,
+            1074932647,
+        ];
+        let row_accumulator_u32_array = [
+            941835991, 3077345396, 3424297652, 3273543402, 1019238783, 2697734118, 2472329327,
+            3872696211,
+        ];
+
+        let accumulator_hash_u64_array = convert_hash_u32_to_u64(accumulator_hash_u32_array);
+        let row_accumulator_u64_array = convert_hash_u32_to_u64(row_accumulator_u32_array);
+
+        println!(
+            "accumulator_hash_u64_array: {:?}",
+            accumulator_hash_u64_array
+        );
+        println!("row_accumulator_u64_array: {:?}", row_accumulator_u64_array);
+
+        let accumulator_hash = Fp::from_raw(accumulator_hash_u64_array);
+        let row_accumulator = Fp::from_raw(row_accumulator_u64_array);
+
+        // 0x39386b0646267f8c932de93e33d3d5e4b4ca56b1007f6bf958677e2440122ba7
+        println!("accumulator_hash: {:?}", accumulator_hash);
+        // 0x382346d7b76c9074cc1aa2b4c31e4eea3cc0597fa0cc27e6935cc06fe6d4a793
+        println!("row_accumulator: {:?}", row_accumulator);
+    }
+
     #[test]
     fn test() {
         let k = 8;

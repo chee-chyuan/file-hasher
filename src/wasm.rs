@@ -48,6 +48,19 @@ fn convert_hash_u32_to_u64(hash_u32: [u32; 8]) -> [u64; 4] {
     res.try_into().unwrap()
 }
 
+fn convert_hash_u32_to_u64_LE(hash_u32: [u32; 8]) -> [u64; 4] {
+    let mut res = Vec::new();
+    for i in 0..4 {
+        let starting_index = i * 2;
+        let arr = [hash_u32[starting_index], hash_u32[starting_index + 1]];
+        let res_u64 = convert_u32_to_u64_BE(arr);
+        res.push(res_u64);
+    }
+
+    res.reverse();
+    res.try_into().unwrap()
+}
+
 fn convert_u32_to_u64_BE(u32_array: [u32; 2]) -> u64 {
     u32_array[0] as u64 * u64::pow(2, 32) + u32_array[1] as u64
 }
@@ -271,6 +284,8 @@ pub fn generate_proof(
     let vk = keygen_vk(&params, &empty_circuit).expect("keygen_vk should not fail");
     let pk = keygen_pk(&params, vk, &empty_circuit).expect("keygen_pk should not fail");
 
+    // JsValue::from_serde(&[format!("{:?}", accumulator_hash), format!("{:?}", row_accumulator)]).unwrap()
+
     let mut transcript = Blake2bWrite::<_, _, Challenge255<_>>::init(vec![]);
     let public_input = vec![accumulator_hash, row_accumulator];
 
@@ -286,6 +301,17 @@ pub fn generate_proof(
     .expect("proof generation should not fail");
     let proof: Vec<u8> = transcript.finalize();
 
+    // verify part
+    // let strategy = SingleVerifier::new(&params);
+    // let mut transcript = Blake2bRead::<_, _, Challenge255<_>>::init(&proof[..]);
+    // verify_proof(
+    //     &params,
+    //     pk.get_vk(),
+    //     strategy,
+    //     &[&[&public_input[..]], &[&public_input[..]]],
+    //     &mut transcript,
+    // )
+    // .is_ok()
     JsValue::from_serde(&proof).unwrap()
 }
 
@@ -296,7 +322,8 @@ pub fn verify_correct_selector(
     row_accumulator_js: JsValue,
     proof_js: JsValue,
 ) -> bool {
-    const row_number: usize = 2;
+    // verify
+    const ROW_NUMBER: usize = 2;
 
     let k = 10;
     let params: Params<EqAffine> = Params::new(k);
@@ -304,21 +331,18 @@ pub fn verify_correct_selector(
     let accumulator_hash_u32_array = accumulator_hash_js.into_serde::<[u32; 8]>().unwrap();
     let row_accumulator_u32_array = row_accumulator_js.into_serde::<[u32; 8]>().unwrap();
 
-    let accumulator_hash_u64_array = convert_hash_u32_to_u64(accumulator_hash_u32_array);
-    let row_accumulator_u64_array = convert_hash_u32_to_u64(row_accumulator_u32_array);
+    let accumulator_hash_u64_array = convert_hash_u32_to_u64_LE(accumulator_hash_u32_array);
+    let row_accumulator_u64_array = convert_hash_u32_to_u64_LE(row_accumulator_u32_array);
 
-    // // convert_hash_u32_to_u64
-    // // let accumulator_hash_u64_array = accumulator_hash_js.into_serde::<[u64; 4]>().unwrap();
-    // // let row_accumulator_u64_array = row_accumulator_js.into_serde::<[u64; 4]>().unwrap();
     let proof = proof_js.into_serde::<Vec<u8>>().unwrap();
 
     let accumulator_hash = Fp::from_raw(accumulator_hash_u64_array);
     let row_accumulator = Fp::from_raw(row_accumulator_u64_array);
 
-    let empty_circuit = FileHashPartialCircuit::<row_number> {
-        row_title: [[Value::unknown(); 4]; row_number],
-        row_content: [[Value::unknown(); 4]; row_number],
-        row_selectors: [Value::unknown(); row_number],
+    let empty_circuit = FileHashPartialCircuit::<ROW_NUMBER> {
+        row_title: [[Value::unknown(); 4]; ROW_NUMBER],
+        row_content: [[Value::unknown(); 4]; ROW_NUMBER],
+        row_selectors: [Value::unknown(); ROW_NUMBER],
     };
 
     let vk = keygen_vk(&params, &empty_circuit).expect("keygen_vk should not fail");
