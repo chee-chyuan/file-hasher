@@ -14,7 +14,7 @@ contract FileHasherCommitment is Ownable {
 
     function commitFileHash(address user, uint256 hash) external onlyOwner {
         uint8 currentIndex = ringBufferIndexes[user];
-        ringBufferIndexes[user] = (currentIndex + 1) / RING_BUFFER_SIZE;
+        ringBufferIndexes[user] = (currentIndex + 1) % RING_BUFFER_SIZE;
 
         fileHashRingBuffers[user][currentIndex] = hash;
 
