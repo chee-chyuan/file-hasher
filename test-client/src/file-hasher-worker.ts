@@ -307,6 +307,11 @@ async function testAllFlow2() {
   const ret = multiThread.wasm_test();
 }
 
+const convertStringToU32 = (input: string) => {
+  const shaRes = sha256(input);
+  return convertSha256HexToU32(shaRes);
+};
+
 async function testAllFlow() {
   debugger;
   const multiThread = await import("file-hasher");
@@ -317,12 +322,10 @@ async function testAllFlow() {
   // create sha256 entry for each row_title and row_content
   // split each sha256 to 4 u64 numbers
   const rowTitlesU32 = rowTitles.map((x) => {
-    const shaRes = sha256(x);
-    return convertSha256HexToU32(shaRes);
+    return convertStringToU32(x);
   });
   const rowContentU32 = rowContent.map((x) => {
-    const shaRes = sha256(x);
-    return convertSha256HexToU32(shaRes);
+    return convertStringToU32(x);
   });
 
   // create selector
@@ -347,8 +350,13 @@ async function testAllFlow() {
     rowSelector
   ); // [u8]
 
+  const selectedRowHex2 = multiThread.get_selected_row(
+    convertStringToU32(rowTitles[selectedRowIndex]),
+    convertStringToU32(rowContent[selectedRowIndex])
+  );
+
   const fileCommitmentU32 = convertSha256HexToU32(fileCommitmentHex);
-  const selectedRowU32 = convertSha256HexToU32(selectedRowHex);
+  const selectedRowU32 = convertSha256HexToU32(selectedRowHex2);
   const verifyResult = multiThread.verify_correct_selector(
     fileCommitmentU32,
     selectedRowU32,

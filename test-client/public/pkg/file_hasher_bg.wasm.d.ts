@@ -3,6 +3,7 @@
 export function wasm_test(a: number): void;
 export function generate_row_hash(a: number, b: number, c: number): void;
 export function get_file_commitment_and_selected_row(a: number, b: number, c: number): number;
+export function get_selected_row(a: number, b: number): number;
 export function generate_proof(a: number, b: number, c: number): number;
 export function verify_correct_selector(a: number, b: number, c: number): number;
 export function __wbg_wbg_rayon_poolbuilder_free(a: number): void;
