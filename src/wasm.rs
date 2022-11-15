@@ -200,6 +200,42 @@ pub fn get_file_commitment_and_selected_row(
     JsValue::from_serde(&res_array).unwrap()
 }
 
+#[wasm_bindgen]
+pub fn get_selected_row(row_title_js: JsValue, row_content_js: JsValue) -> JsValue {
+    let row_title_u32 = row_title_js.into_serde::<[u32; 8]>().unwrap();
+    let row_content_u32 = row_content_js.into_serde::<[u32; 8]>().unwrap();
+
+    let row_title_u64 = convert_hash_u32_to_u64(row_title_u32);
+    let row_content_u64 = convert_hash_u32_to_u64(row_content_u32);
+
+    let row_title = row_title_u64.map(|y| return Fp::from(y));
+    let row_content = row_content_u64.map(|y| return Fp::from(y));
+
+    let title_message_1 = [row_title[0], row_title[1]];
+    let title_message_2 = [row_title[2], row_title[3]];
+
+    let title_message_1_output =
+        poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init().hash(title_message_1);
+    let title_message_2_output =
+        poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init().hash(title_message_2);
+    let title_hash = poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init()
+        .hash([title_message_1_output, title_message_2_output]);
+
+    let content_message_1 = [row_content[0], row_content[1]];
+    let content_message_2 = [row_content[2], row_content[3]];
+
+    let content_message_1_output =
+        poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init().hash(content_message_1);
+    let content_message_2_output =
+        poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init().hash(content_message_2);
+    let content_hash = poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init()
+        .hash([content_message_1_output, content_message_2_output]);
+    let message = [title_hash, content_hash];
+    let output = poseidon::Hash::<_, P128Pow5T3, ConstantLength<2>, 3, 2>::init().hash(message);
+
+    JsValue::from_serde(&format!("{:?}", output)).unwrap()
+}
+
 // row_title_js, row_content_js, row_selector_js consist of 4 Fp from sha256 result of string
 // this needs to be done in the js side
 #[wasm_bindgen]

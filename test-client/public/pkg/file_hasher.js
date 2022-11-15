@@ -155,6 +155,16 @@ export function get_file_commitment_and_selected_row(row_title_js, row_content_j
 /**
 * @param {any} row_title_js
 * @param {any} row_content_js
+* @returns {any}
+*/
+export function get_selected_row(row_title_js, row_content_js) {
+    const ret = wasm.get_selected_row(addHeapObject(row_title_js), addHeapObject(row_content_js));
+    return takeObject(ret);
+}
+
+/**
+* @param {any} row_title_js
+* @param {any} row_content_js
 * @param {any} row_selector_js
 * @returns {any}
 */

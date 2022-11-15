@@ -20,6 +20,12 @@ export function get_file_commitment_and_selected_row(row_title_js: any, row_cont
 /**
 * @param {any} row_title_js
 * @param {any} row_content_js
+* @returns {any}
+*/
+export function get_selected_row(row_title_js: any, row_content_js: any): any;
+/**
+* @param {any} row_title_js
+* @param {any} row_content_js
 * @param {any} row_selector_js
 * @returns {any}
 */
@@ -63,6 +69,7 @@ export interface InitOutput {
   readonly wasm_test: (a: number) => void;
   readonly generate_row_hash: (a: number, b: number, c: number) => void;
   readonly get_file_commitment_and_selected_row: (a: number, b: number, c: number) => number;
+  readonly get_selected_row: (a: number, b: number) => number;
   readonly generate_proof: (a: number, b: number, c: number) => number;
   readonly verify_correct_selector: (a: number, b: number, c: number) => number;
   readonly __wbg_wbg_rayon_poolbuilder_free: (a: number) => void;
