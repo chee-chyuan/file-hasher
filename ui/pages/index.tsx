@@ -17,6 +17,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { Navbar } from "../components";
 import FileUpload from "../components/FileUpload";
+import Label from "../components/Label";
 
 const Home: NextPage = () => {
   const [mounted, setMounted] = useState(false);
@@ -50,6 +51,7 @@ const Home: NextPage = () => {
           <TabPanels>
             <TabPanel>
               <p>one!</p>
+              <Label>asdfasdf</Label>
               <FileUpload />
             </TabPanel>
             <TabPanel>
