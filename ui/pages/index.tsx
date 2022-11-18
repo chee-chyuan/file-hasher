@@ -16,6 +16,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { Navbar } from "../components";
+import FileUpload from "../components/FileUpload";
 
 const Home: NextPage = () => {
   const [mounted, setMounted] = useState(false);
@@ -49,6 +50,7 @@ const Home: NextPage = () => {
           <TabPanels>
             <TabPanel>
               <p>one!</p>
+              <FileUpload />
             </TabPanel>
             <TabPanel>
               <p>two!</p>
