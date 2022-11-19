@@ -20,45 +20,14 @@
       "additionalContracts": []
     }
   ],
-  "receipts": [
-    {
-      "transactionHash": "0xebfa5214e2e7af185472afbf6e30104c1b043b93c7052f2db1bf33de5de44425",
-      "transactionIndex": "0x11",
-      "blockHash": "0x054a98d24e4d390456869d1778930a9805ffa843ba4975266c4ff97a23e24091",
-      "blockNumber": "0x79c926",
-      "from": "0xEd0EEB2086A64B92A7e3B11E3b44275f25746097",
-      "to": null,
-      "cumulativeGasUsed": "0x131c2e",
-      "gasUsed": "0x4e816",
-      "contractAddress": "0x2784fD24dF8AFe7FDE2735695E6b59cABf3467e1",
-      "logs": [
-        {
-          "address": "0x2784fD24dF8AFe7FDE2735695E6b59cABf3467e1",
-          "topics": [
-            "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
-            "0x0000000000000000000000000000000000000000000000000000000000000000",
-            "0x000000000000000000000000ed0eeb2086a64b92a7e3b11e3b44275f25746097"
-          ],
-          "data": "0x",
-          "blockHash": "0x054a98d24e4d390456869d1778930a9805ffa843ba4975266c4ff97a23e24091",
-          "blockNumber": "0x79c926",
-          "transactionHash": "0xebfa5214e2e7af185472afbf6e30104c1b043b93c7052f2db1bf33de5de44425",
-          "transactionIndex": "0x11",
-          "logIndex": "0xb",
-          "removed": false
-        }
-      ],
-      "status": "0x1",
-      "logsBloom": "0x00000000000040000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000001000000000000000000000000000000000000020004000000000000000800000000400000000000000000000000400000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000",
-      "type": "0x2",
-      "effectiveGasPrice": "0x1b6244fb0"
-    }
-  ],
+  "receipts": [],
   "libraries": [],
-  "pending": [],
+  "pending": [
+    "0xebfa5214e2e7af185472afbf6e30104c1b043b93c7052f2db1bf33de5de44425"
+  ],
   "path": "/Users/kim/development/projects/file-hasher/contract/broadcast/FileHasherCommitmentDeploy.s.sol/5/run-latest.json",
   "returns": {},
-  "timestamp": 1668861466,
+  "timestamp": 1668861426,
   "chain": 5,
   "multi": false,
   "commit": "83c856a"
