@@ -253,14 +253,14 @@ const testProof = [
 const rowTitles = [
   "1",
   "1",
-  // "3",
-  // "4",
-  // "5",
-  // "6",
-  // "7",
-  // "8",
-  // "9",
-  // "10",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
   // "11",
   // "12",
   // "13",
@@ -275,14 +275,14 @@ const rowTitles = [
 const rowContent = [
   "1",
   "1",
-  // "3",
-  // "4",
-  // "5",
-  // "6",
-  // "7",
-  // "8",
-  // "9",
-  // "10",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
   // "11",
   // "12",
   // "13",
@@ -330,7 +330,7 @@ async function testAllFlow() {
 
   // create selector
   const selectedRowIndex = 0;
-  const rowSelector = Array(2).fill(0);
+  const rowSelector = Array(10).fill(0);
   rowSelector[selectedRowIndex] = 1; // selecting the first entry
   const rowHashHex = multiThread.generate_row_hash(
     rowTitlesU32[selectedRowIndex],
