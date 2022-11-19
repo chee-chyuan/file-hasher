@@ -134,7 +134,7 @@ pub fn get_file_commitment_and_selected_row(
     row_content_js: JsValue,
     row_selector_js: JsValue,
 ) -> JsValue {
-    const ROW: usize = 2;
+    const ROW: usize = 10;
     let row_title_u32 = row_title_js.into_serde::<[[u32; 8]; ROW]>().unwrap();
     let row_content_u32 = row_content_js.into_serde::<[[u32; 8]; ROW]>().unwrap();
 
@@ -244,10 +244,10 @@ pub fn generate_proof(
     row_content_js: JsValue,
     row_selector_js: JsValue,
 ) -> JsValue {
-    let k = 10;
+    let k = 12;
     let params: Params<EqAffine> = Params::new(k);
 
-    const ROW: usize = 2;
+    const ROW: usize = 10;
     let row_title_u32 = row_title_js.into_serde::<[[u32; 8]; ROW]>().unwrap();
     let row_content_u32 = row_content_js.into_serde::<[[u32; 8]; ROW]>().unwrap();
 
@@ -337,17 +337,6 @@ pub fn generate_proof(
     .expect("proof generation should not fail");
     let proof: Vec<u8> = transcript.finalize();
 
-    // verify part
-    // let strategy = SingleVerifier::new(&params);
-    // let mut transcript = Blake2bRead::<_, _, Challenge255<_>>::init(&proof[..]);
-    // verify_proof(
-    //     &params,
-    //     pk.get_vk(),
-    //     strategy,
-    //     &[&[&public_input[..]], &[&public_input[..]]],
-    //     &mut transcript,
-    // )
-    // .is_ok()
     JsValue::from_serde(&proof).unwrap()
 }
 
@@ -359,9 +348,9 @@ pub fn verify_correct_selector(
     proof_js: JsValue,
 ) -> bool {
     // verify
-    const ROW_NUMBER: usize = 2;
+    const ROW_NUMBER: usize = 10;
 
-    let k = 10;
+    let k = 12;
     let params: Params<EqAffine> = Params::new(k);
 
     let accumulator_hash_u32_array = accumulator_hash_js.into_serde::<[u32; 8]>().unwrap();
