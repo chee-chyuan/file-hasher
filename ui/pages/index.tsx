@@ -24,29 +24,6 @@ import FileHasher from "../artifacts/contracts/FileHash.sol/FileHash.json"
 
 const Home: NextPage = () => {
   const [mounted, setMounted] = useState(false);
-  const getOwner = async () => {
-    try {
-      const { ethereum } = window
-
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum)
-        const signer = provider.getSigner()
-        const fileHasher = new ethers.Contract(
-          FileHasher.contractAddress,
-          FileHasher.abi,
-          signer
-        )
-
-        let fileHashOwner = await fileHasher.owner()
-        console.log("fileHashOwner: ", fileHashOwner)
-
-      } else {
-        console.log("Ethereum object doesn't exist!")
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
   useEffect(() => setMounted(true), []);
   return (
     <>
@@ -77,7 +54,6 @@ const Home: NextPage = () => {
               <p>one!</p>
               <Label>asdfasdf</Label>
               <FileUpload />
-              <Button onClick={getOwner}>Test</Button>
             </TabPanel>
             <TabPanel>
               <p>two!</p>
