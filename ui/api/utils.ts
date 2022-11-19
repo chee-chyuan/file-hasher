@@ -122,7 +122,6 @@ const convertSha256HexToU32 = (hash: string) => {
 };
 
 const testAllFlow = async () => { 
-  debugger;
   const rowTitles = ["1","1"];
   const rowContent = ["1","1"];
   const fileCommitmentHex = await getFileCommitment(rowTitles, rowContent);
@@ -131,9 +130,12 @@ const testAllFlow = async () => {
   console.log("verify result is ",verifyResult);
 }
 
-const exports = {
-  testAllFlow,
-};
-export type FileHasherWorker = typeof exports;
 
-expose(exports);
+testAllFlow()
+
+// const exports = {
+//   testAllFlow,
+// };
+// export type FileHasherWorker = typeof exports;
+
+// expose(exports);
