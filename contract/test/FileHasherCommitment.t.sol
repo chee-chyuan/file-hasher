@@ -14,18 +14,18 @@ contract FileHasherCommitmentTest is Test {
         fileHashCommitment = new FileHasherCommitment();
     }
 
-    // test only owner
-    function testCannotCommitForNonOwner() public {
-        address ownerAddr = fileHashCommitment.owner();
-        console2.log("ownerAddr: %s", ownerAddr);
+    // // test only owner
+    // function testCannotCommitForNonOwner() public {
+    //     address ownerAddr = fileHashCommitment.owner();
+    //     console2.log("ownerAddr: %s", ownerAddr);
 
-        address aliceAddr = utils.createUsers(1)[0];
-        assertTrue(ownerAddr != aliceAddr);
+    //     address aliceAddr = utils.createUsers(1)[0];
+    //     assertTrue(ownerAddr != aliceAddr);
 
-        vm.prank(address(aliceAddr));
-        vm.expectRevert("Ownable: caller is not the owner");
-        fileHashCommitment.commitFileHash(aliceAddr, 1);
-    }
+    //     vm.prank(address(aliceAddr));
+    //     vm.expectRevert("Ownable: caller is not the owner");
+    //     fileHashCommitment.commitFileHash(aliceAddr, 1);
+    // }
 
     // test able to store and get hash correctly
     function testStoreHashCorrectly() public {
