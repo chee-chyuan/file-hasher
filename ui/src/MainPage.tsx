@@ -12,12 +12,14 @@ import { useEffect, useState } from "react";
 import { Navbar } from "./components";
 import { FlexibleFormTable } from "./components/tables/FlexibleFormTable";
 import FileUpload from "./components/FileUpload";
-import FileHasher from "./artifacts/contracts/FileHash.sol/FileHash.json";
+import { FileHasher } from "./file-hasher.worker";
+import { Remote } from "comlink";
 
-export const MainPage = () => {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+export type MainPageProps = {
+  wasmWorkerApi: Remote<FileHasher>;
+};
 
+export const MainPage = ({ wasmWorkerApi }: MainPageProps) => {
   return (
     <>
       <Flex
