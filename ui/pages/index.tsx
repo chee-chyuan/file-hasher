@@ -1,11 +1,5 @@
 import {
-  Box,
-  Container,
   Flex,
-  Grid,
-  GridItem,
-  Heading,
-  Img,
   Tabs,
   TabList,
   TabPanels,
@@ -18,14 +12,14 @@ import { useEffect, useState } from "react";
 import { Navbar } from "../components";
 import FileUpload from "../components/FileUpload";
 import Label from "../components/Label";
-import { ExportCertificateCSV } from "../helper/export";
 
 const Home: NextPage = () => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
   useEffect(() => {
-    ExportCertificateCSV(["test1"], ["test2"])
+    // ExportCertificateCSV(["test1"], ["test2"])
+    // ExportProofJson("0x123", "title1", "content1", "proofasdfasdfasdfasdf")
   }, [])
 
   return (

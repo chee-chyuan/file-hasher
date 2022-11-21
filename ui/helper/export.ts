@@ -1,4 +1,4 @@
-
+import { saveAs } from 'file-saver';
 
 export const ExportCertificateCSV = (key: string[], value: string[]) => {
     const rows = [
@@ -7,6 +7,22 @@ export const ExportCertificateCSV = (key: string[], value: string[]) => {
 
     let csvContent = "data:text/csv;charset=utf-8,"
         + rows.map(e => e.join(",")).join("\n");
-    var encodedUri = encodeURI(csvContent);
+    let encodedUri = encodeURI(csvContent);
     window.open(encodedUri);
 }
+
+export const ExportProofJson = (address: String, selectedRowTitle: string, selectedRowContent: string, proof: string) => {
+    const jsonObject = {
+        address: address,
+        selectedRowTitle: selectedRowTitle,
+        selectedRowContent: selectedRowContent,
+        proof: proof
+    }
+
+    let proofFile = new Blob([JSON.stringify(jsonObject)], {
+        type: 'application/json'
+    });
+
+    saveAs(proofFile, "proof.json");
+}
+
