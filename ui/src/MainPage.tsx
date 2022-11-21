@@ -17,6 +17,7 @@ import FileHasher from "./artifacts/contracts/FileHash.sol/FileHash.json";
 export const MainPage = () => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+
   return (
     <>
       <Flex
