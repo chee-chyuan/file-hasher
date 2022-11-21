@@ -19,6 +19,7 @@ import FileHasher from "../artifacts/contracts/FileHash.sol/FileHash.json";
 const Home: NextPage = () => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+
   return (
     <>
       <Head>
