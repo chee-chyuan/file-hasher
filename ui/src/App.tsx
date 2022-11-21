@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { wrap } from "comlink";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -48,41 +48,46 @@ const Disclaimer: DisclaimerComponent = ({ Text, Link }) => (
 );
 
 const App = () => {
-  const worker = new Worker(new URL("./file-hasher-worker", import.meta.url), {
-    name: "file-hasher-worker",
-    type: "module",
-  });
-  const workerApi =
-    wrap<import("./file-hasher-worker").FileHasherWorker>(worker);
+  // Memoize worker and workerApi to prevent unneccessary rerenders
+  const worker = useMemo(() => {
+    return new Worker(new URL("./file-hasher.worker", import.meta.url), {
+      name: "file-hasher.worker",
+      type: "module",
+    });
+  }, []);
 
-  // const testAllFlow = async () => {
-  //   const rowTitles = ["1", "1"];
-  //   const rowContent = ["1", "1"];
-  //   const fileCommitmentHex = await workerApi.getFileCommitment(
-  //     rowTitles,
-  //     rowContent
-  //   );
-  //   const proof = await workerApi.getProof(rowTitles, rowContent, 0);
-  //   const verifyResult = await workerApi.verifyProof(
-  //     proof,
-  //     "1",
-  //     "1",
-  //     fileCommitmentHex
-  //   );
-  //   console.log("verify result is ", verifyResult);
-  // };
+  const workerApi = useMemo(() => {
+    return wrap<import("./file-hasher.worker").FileHasher>(worker);
+  }, [worker]);
 
-  // testAllFlow();
-
-  workerApi.testAllFlow();
+  useEffect(() => {
+    const testAllFlow = async () => {
+      const rowTitles = ["1", "1"];
+      const rowContent = ["1", "1"];
+      await workerApi.initialize();
+      const fileCommitmentHex = await workerApi.getFileCommitment(
+        rowTitles,
+        rowContent
+      );
+      const proof = await workerApi.getProof(rowTitles, rowContent, 0);
+      const verifyResult = await workerApi.verifyProof(
+        proof,
+        "1",
+        "1",
+        fileCommitmentHex
+      );
+      console.log("verify result is ", verifyResult);
+    };
+    if (worker && workerApi) {
+      testAllFlow();
+    }
+  }, [worker, workerApi]);
 
   return (
     <>
       <Helmet>
         <title>Zk Form</title>
       </Helmet>
-
-      {/* <FileHasherWorkerProvider worker={workerApiRef}> */}
       <ChakraProvider resetCSS theme={theme}>
         <WagmiConfig client={wagmiClient}>
           <RainbowKitProvider
@@ -95,11 +100,10 @@ const App = () => {
             }}
             coolMode
           >
-            <MainPage />
+            <MainPage wasmWorkerApi={workerApi} />
           </RainbowKitProvider>
         </WagmiConfig>
       </ChakraProvider>
-      {/* </FileHasherWorkerProvider> */}
     </>
   );
 };

@@ -5,97 +5,95 @@ import {
   convertStringToU32,
 } from "./utils/sha256-conversion";
 
-const getFileCommitment = async function (
-  rowTitles: string[],
-  rowContent: string[]
-): Promise<string> {
-  const multiThread = await import("file-hasher");
-  await multiThread.default();
-  await multiThread.initThreadPool(navigator.hardwareConcurrency);
+export class FileHasher {
+  private multiThread?: typeof import("file-hasher");
 
-  const rowTitlesU32 = rowTitles.map((x) => {
-    const shaRes = sha256(x);
-    return convertSha256HexToU32(shaRes);
-  });
-  const rowContentU32 = rowContent.map((x) => {
-    const shaRes = sha256(x);
-    return convertSha256HexToU32(shaRes);
-  });
+  async initialize() {
+    this.multiThread = await import("file-hasher");
+    await this.multiThread.default();
+    await this.multiThread.initThreadPool(navigator.hardwareConcurrency);
+  }
 
-  const selectedRowIndex = 0;
-  const rowSelector = Array(rowTitles.length).fill(0);
-  rowSelector[selectedRowIndex] = 1;
+  async getFileCommitment(
+    rowTitles: string[],
+    rowContent: string[]
+  ): Promise<string> {
+    if (!this.multiThread) {
+      throw new Error("Not initialized");
+    }
 
-  const [fileCommitmentHex] = multiThread.get_file_commitment_and_selected_row(
-    rowTitlesU32,
-    rowContentU32,
-    rowSelector
-  );
+    const rowTitlesU32 = rowTitles.map((x) => {
+      const shaRes = sha256(x);
+      return convertSha256HexToU32(shaRes);
+    });
+    const rowContentU32 = rowContent.map((x) => {
+      const shaRes = sha256(x);
+      return convertSha256HexToU32(shaRes);
+    });
 
-  return fileCommitmentHex;
-};
+    const selectedRowIndex = 0;
+    const rowSelector = Array(rowTitles.length).fill(0);
+    rowSelector[selectedRowIndex] = 1;
 
-const getProof = async function (
-  rowTitles: string[],
-  rowContent: string[],
-  index: number
-) {
-  const multiThread = await import("file-hasher");
-  await multiThread.default();
-  await multiThread.initThreadPool(navigator.hardwareConcurrency);
+    const [fileCommitmentHex] =
+      this.multiThread.get_file_commitment_and_selected_row(
+        rowTitlesU32,
+        rowContentU32,
+        rowSelector
+      );
 
-  const rowTitlesU32 = rowTitles.map((x) => {
-    const shaRes = sha256(x);
-    return convertSha256HexToU32(shaRes);
-  });
-  const rowContentU32 = rowContent.map((x) => {
-    const shaRes = sha256(x);
-    return convertSha256HexToU32(shaRes);
-  });
+    return fileCommitmentHex;
+  }
 
-  const rowSelector = Array(rowTitles.length).fill(0);
-  rowSelector[index] = 1;
+  async getProof(rowTitles: string[], rowContent: string[], index: number) {
+    if (!this.multiThread) {
+      throw new Error("Not initialized");
+    }
 
-  const proof = multiThread.generate_proof(
-    rowTitlesU32,
-    rowContentU32,
-    rowSelector
-  );
+    const rowTitlesU32 = rowTitles.map((x) => {
+      const shaRes = sha256(x);
+      return convertSha256HexToU32(shaRes);
+    });
+    const rowContentU32 = rowContent.map((x) => {
+      const shaRes = sha256(x);
+      return convertSha256HexToU32(shaRes);
+    });
 
-  return proof;
-};
+    const rowSelector = Array(rowTitles.length).fill(0);
+    rowSelector[index] = 1;
 
-const verifyProof = async function (
-  proof: any,
-  rowTitle: string,
-  rowContent: string,
-  fileCommitmentHex: string
-): Promise<Boolean> {
-  const multiThread = await import("file-hasher");
-  await multiThread.default();
-  await multiThread.initThreadPool(navigator.hardwareConcurrency);
+    const proof = this.multiThread.generate_proof(
+      rowTitlesU32,
+      rowContentU32,
+      rowSelector
+    );
 
-  const selectedRowHex = multiThread.get_selected_row(
-    convertStringToU32(rowTitle),
-    convertStringToU32(rowContent)
-  );
+    return proof;
+  }
 
-  const fileCommitmentU32 = convertSha256HexToU32(fileCommitmentHex);
-  const selectedRowU32 = convertSha256HexToU32(selectedRowHex);
-  const verifyResult = multiThread.verify_correct_selector(
-    fileCommitmentU32,
-    selectedRowU32,
-    proof
-  );
-  return verifyResult;
-};
+  async verifyProof(
+    proof: any,
+    rowTitle: string,
+    rowContent: string,
+    fileCommitmentHex: string
+  ): Promise<Boolean> {
+    if (!this.multiThread) {
+      throw new Error("Not initialized");
+    }
+    const selectedRowHex = this.multiThread.get_selected_row(
+      convertStringToU32(rowTitle),
+      convertStringToU32(rowContent)
+    );
 
-const exports = {
-  getFileCommitment,
-  getProof,
-  verifyProof,
-};
+    const fileCommitmentU32 = convertSha256HexToU32(fileCommitmentHex);
+    const selectedRowU32 = convertSha256HexToU32(selectedRowHex);
+    const verifyResult = this.multiThread.verify_correct_selector(
+      fileCommitmentU32,
+      selectedRowU32,
+      proof
+    );
+    return verifyResult;
+  }
+}
 
-export type FileHasherWorker = typeof exports;
-
-expose(exports);
+expose(new FileHasher());
