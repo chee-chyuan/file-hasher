@@ -5,22 +5,20 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  Button,
 } from "@chakra-ui/react";
+import { ethers } from "ethers";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { Navbar } from "../components";
+import { FlexibleFormTable } from "../components/tables/FlexibleFormTable";
 import FileUpload from "../components/FileUpload";
-import Label from "../components/Label";
+import FileHasher from "../artifacts/contracts/FileHash.sol/FileHash.json";
 
 const Home: NextPage = () => {
   const [mounted, setMounted] = useState(false);
-
   useEffect(() => setMounted(true), []);
-  useEffect(() => {
-    // ExportCertificateCSV(["test1"], ["test2"])
-    // ExportProofJson("0x123", "title1", "content1", "proofasdfasdfasdfasdf")
-  }, [])
 
   return (
     <>
@@ -48,8 +46,7 @@ const Home: NextPage = () => {
 
           <TabPanels>
             <TabPanel>
-              <p>one!</p>
-              <Label>asdfasdf</Label>
+              <FlexibleFormTable />
               <FileUpload />
             </TabPanel>
             <TabPanel>
