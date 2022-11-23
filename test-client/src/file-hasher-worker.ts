@@ -295,17 +295,17 @@ const rowContent = [
   // "20",
 ];
 
-async function testAllFlow2() {
-  debugger;
-  const multiThread = await import("file-hasher");
-  await multiThread.default();
-  await multiThread.initThreadPool(navigator.hardwareConcurrency);
+// async function testAllFlow2() {
+//   debugger;
+//   const multiThread = await import("file-hasher");
+//   await multiThread.default();
+//   await multiThread.initThreadPool(navigator.hardwareConcurrency);
 
-  const shaRes = sha256("hello");
-  const hash = convertSha256HexToU32(shaRes);
-  const hash2 = convertSha256HexToU64(shaRes);
-  const ret = multiThread.wasm_test();
-}
+//   const shaRes = sha256("hello");
+//   const hash = convertSha256HexToU32(shaRes);
+//   const hash2 = convertSha256HexToU64(shaRes);
+//   const ret = multiThread.wasm_test();
+// }
 
 const convertStringToU32 = (input: string) => {
   const shaRes = sha256(input);
