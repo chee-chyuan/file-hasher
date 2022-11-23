@@ -11,7 +11,7 @@ import {
   Radio,
 } from "@chakra-ui/react";
 
-export type FlexibleFormTableProps = {
+export type RowSelectTableProps = {
   rowTitles?: string[];
   rowValues?: string[];
   onChange?: (nextVal: string) => any;
@@ -21,7 +21,7 @@ export const RowSelectTable = ({
   rowTitles = [],
   rowValues = [],
   onChange = () => {},
-}: FlexibleFormTableProps) => {
+}: RowSelectTableProps) => {
   const [selectedRow, setSelectedRow] = useState(rowTitles[0]);
 
   const onRowSelected = (nextVal: string) => {
