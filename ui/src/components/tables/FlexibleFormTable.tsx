@@ -7,13 +7,10 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
   Button,
   Input,
   IconButton,
-  Flex,
-  Spacer,
 } from "@chakra-ui/react";
 
 export type FlexibleFormTableProps = {

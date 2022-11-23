@@ -30,10 +30,10 @@ export const RowSelectTable = ({
   };
 
   return (
-    <TableContainer>
+    <TableContainer w="100%">
       <form>
         <RadioGroup value={selectedRow} onChange={onRowSelected}>
-          <Table variant="simple">
+          <Table variant="simple" size="lg">
             <Thead>
               <Tr>
                 <Th>Keys</Th>

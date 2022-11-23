@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { wrap } from "comlink";
 import { ChakraProvider } from "@chakra-ui/react";
-import { theme } from "./styles";
 import {
   darkTheme,
   DisclaimerComponent,
@@ -13,6 +12,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import "material-react-toastify/dist/ReactToastify.css";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
+import { theme } from "./styles";
 import { MainPage } from "./MainPage";
 
 const { chains, provider } = configureChains(
