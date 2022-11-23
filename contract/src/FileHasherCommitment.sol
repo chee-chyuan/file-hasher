@@ -13,7 +13,7 @@ contract FileHasherCommitment is AccessControl {
 
     event CommittedFile(address indexed user, uint256 hash);
 
-    constructor () {
+    constructor() {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 

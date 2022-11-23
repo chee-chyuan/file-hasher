@@ -42,7 +42,7 @@ export const MainPage = ({ wasmWorkerApi }: MainPageProps) => {
           {/* Content */}
           <TabPanels>
             <TabPanel>
-              <CreateFormPanel />
+              <CreateFormPanel wasmWorkerApi={wasmWorkerApi} />
             </TabPanel>
             <TabPanel>
               <GenerateProofPanel />

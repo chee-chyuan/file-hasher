@@ -9,7 +9,6 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
-import "material-react-toastify/dist/ReactToastify.css";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { theme } from "./styles";
@@ -23,6 +22,7 @@ const { chains, provider } = configureChains(
     chain.polygonMumbai,
     chain.optimism,
     chain.arbitrum,
+    chain.localhost,
   ],
   [publicProvider()]
 );
@@ -81,6 +81,7 @@ const App = () => {
       console.log("verify result is ", verifyResult);
     };
     if (worker && workerApi) {
+      workerApi.initialize();
       testAllFlow();
     }
   }, [worker, workerApi]);
