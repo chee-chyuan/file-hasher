@@ -8,11 +8,11 @@ import {
 } from "@chakra-ui/react";
 import { Navbar } from "./components";
 import { FileHasher } from "./file-hasher.worker";
-import Verify from "./components/VerifyPage";
 import { Remote } from "comlink";
 import { CreateFormPanel } from "./components/tab-panels/CreateFormPanel";
 import { GenerateProofPanel } from "./components/tab-panels/GenerateProofPanel";
 import { VerifyProofPanel } from "./components/tab-panels/VerifyProofPanel";
+import Verify from "./components/tab-panels/VerifyFormPanel";
 
 export type MainPageProps = {
   wasmWorkerApi: Remote<FileHasher>;
@@ -49,7 +49,7 @@ export const MainPage = ({ wasmWorkerApi }: MainPageProps) => {
               <GenerateProofPanel />
             </TabPanel>
             <TabPanel>
-              <Verify wasmWorkerApi={wasmWorkerApi}/>
+              <Verify wasmWorkerApi={wasmWorkerApi} />
             </TabPanel>
           </TabPanels>
         </Tabs>

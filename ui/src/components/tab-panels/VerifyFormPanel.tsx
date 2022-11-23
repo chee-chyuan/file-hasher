@@ -5,10 +5,10 @@ import { ethers } from "ethers";
 // import "dotenv"
 import { Card, CardHeader, CardBody, CardFooter, Heading, Stack, StackDivider, Box, Text, Button, Center } from '@chakra-ui/react'
 import { Remote } from "comlink";
-import { FileHasher } from "../file-hasher.worker";
+import { FileHasher } from "../../file-hasher.worker";
 import { useAccount } from 'wagmi'
-import fileHashContractDetails from "../artifacts/contracts/FileHash.sol/FileHash.json"
-import { convertStringToU32 } from "../utils/sha256-conversion";
+import fileHashContractDetails from "../../artifacts/contracts/FileHash.sol/FileHash.json"
+import { convertStringToU32 } from "../../utils/sha256-conversion";
 
 export type VerifyProps = {
   wasmWorkerApi: Remote<FileHasher>;
