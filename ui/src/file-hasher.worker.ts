@@ -7,11 +7,15 @@ import {
 
 export class FileHasher {
   private multiThread?: typeof import("file-hasher");
+  public isInitialized: boolean = false;
 
   async initialize() {
-    this.multiThread = await import("file-hasher");
-    await this.multiThread.default();
-    await this.multiThread.initThreadPool(navigator.hardwareConcurrency);
+    if (!this.isInitialized) {
+      this.multiThread = await import("file-hasher");
+      await this.multiThread.default();
+      await this.multiThread.initThreadPool(navigator.hardwareConcurrency);
+      this.isInitialized = true;
+    }
   }
 
   async getFileCommitment(
@@ -23,12 +27,10 @@ export class FileHasher {
     }
 
     const rowTitlesU32 = rowTitles.map((x) => {
-      const shaRes = sha256(x);
-      return convertSha256HexToU32(shaRes);
+      return convertStringToU32(x);
     });
     const rowContentU32 = rowContent.map((x) => {
-      const shaRes = sha256(x);
-      return convertSha256HexToU32(shaRes);
+      return convertStringToU32(x);
     });
 
     const selectedRowIndex = 0;

@@ -32,20 +32,14 @@ contract FileHasherCommitmentTest is Test {
         address aliceAddr = utils.createUsers(1)[0];
         uint8 currentIndex = fileHashCommitment.ringBufferIndexes(aliceAddr);
         assertEq(currentIndex, 0);
-        assertEq(
-            fileHashCommitment.fileHashRingBuffers(aliceAddr, currentIndex),
-            0
-        );
+        assertEq(fileHashCommitment.fileHashRingBuffers(aliceAddr, currentIndex), 0);
 
         uint256 hashToStore = 1;
         fileHashCommitment.commitFileHash(aliceAddr, hashToStore);
 
         uint8 newCurrentIndex = fileHashCommitment.ringBufferIndexes(aliceAddr);
         assertEq(newCurrentIndex, currentIndex + 1);
-        assertEq(
-            fileHashCommitment.fileHashRingBuffers(aliceAddr, currentIndex),
-            hashToStore
-        );
+        assertEq(fileHashCommitment.fileHashRingBuffers(aliceAddr, currentIndex), hashToStore);
     }
 
     // test hash is wrapped around when index is full
@@ -53,9 +47,7 @@ contract FileHasherCommitmentTest is Test {
         address aliceAddr = utils.createUsers(1)[0];
         uint256 hashToStore = 100;
         for (uint256 i = 0; i < fileHashCommitment.RING_BUFFER_SIZE(); ++i) {
-            uint8 currentIndex = fileHashCommitment.ringBufferIndexes(
-                aliceAddr
-            );
+            uint8 currentIndex = fileHashCommitment.ringBufferIndexes(aliceAddr);
             assertEq(currentIndex, i);
             fileHashCommitment.commitFileHash(aliceAddr, hashToStore);
         }

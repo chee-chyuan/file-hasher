@@ -8,11 +8,8 @@ import {
   Th,
   Td,
   TableContainer,
-  Button,
   Input,
   IconButton,
-  Flex,
-  Spacer,
 } from "@chakra-ui/react";
 
 export type FlexibleFormTableProps = {
@@ -34,13 +31,13 @@ export const FlexibleFormTable = ({
    * of either states will trigger a rerendering of everything as well.
    * Isolating it should restrict rendering slightly (Although not much).
    */
-  const [rowTitles, setRowTitles] = useState([""]);
-  const [rowValues, setRowValues] = useState([""]);
+  const [rowTitles, setRowTitles] = useState(new Array(10).fill("0"));
+  const [rowValues, setRowValues] = useState(new Array(10).fill("0"));
 
-  const addEditableRow = () => {
-    setRowTitles((prevRowTitles) => prevRowTitles.concat(""));
-    setRowValues((prevRowValues) => prevRowValues.concat(""));
-  };
+  // const addEditableRow = () => {
+  //   setRowTitles((prevRowTitles) => prevRowTitles.concat(""));
+  //   setRowValues((prevRowValues) => prevRowValues.concat(""));
+  // };
 
   const removeEditableRow = (index: number) => {
     setRowTitles((prevRowTitles) =>
@@ -80,9 +77,9 @@ export const FlexibleFormTable = ({
               <Th>Keys</Th>
               <Th>Value</Th>
               <Th>
-                <Button rightIcon={<AddIcon />} onClick={addEditableRow}>
+                {/* <Button rightIcon={<AddIcon />} onClick={addEditableRow}>
                   Add row
-                </Button>
+                </Button> */}
               </Th>
             </Tr>
           </Thead>

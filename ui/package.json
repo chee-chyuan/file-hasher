@@ -15,7 +15,6 @@
     "file-saver": "^2.0.5",
     "framer-motion": "^7.3.2",
     "js-sha256": "^0.9.0",
-    "material-react-toastify": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
@@ -29,6 +28,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
+    "@typechain/ethers-v5": "^10.1.1",
     "@types/file-saver": "^2.0.5",
     "@types/jest": "^27.0.1",
     "@types/node": "^18.11.9",
@@ -77,6 +77,8 @@
     "tailwindcss": "^3.0.2",
     "terser-webpack-plugin": "^5.2.5",
     "ts-node": "^10.9.1",
+    "typechain": "^8.1.1",
+    "typechain-target-ethers-v5": "^5.0.1",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0",
     "webpack": "^5.64.4",
@@ -87,6 +89,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "build:typechain": "typechain --target=ethers-v5 './src/artifacts/contracts/**/*.json' --out-dir='./src/typechain-types'",
     "test": "node scripts/test.js",
     "build:wasm": "cd .. && wasm-pack build --target web --out-dir ./test-client/public/pkg"
   },
