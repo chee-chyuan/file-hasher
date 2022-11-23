@@ -11,6 +11,8 @@ import {
   Button,
   Input,
   IconButton,
+  Flex,
+  Spacer,
 } from "@chakra-ui/react";
 
 export type FlexibleFormTableProps = {
