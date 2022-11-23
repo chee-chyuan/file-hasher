@@ -11,8 +11,8 @@ dev-graph = ["halo2_proofs/dev-graph", "plotters"]
 [dependencies]
 # halo2_gadgets = "0.2.0"
 # halo2_proofs = "0.2.0"
-halo2_gadgets = {path = "/Users/cheechyuan/Documents/repo/halo2/halo2/halo2_gadgets"}
-halo2_proofs = {path = "/Users/cheechyuan/Documents/repo/halo2/halo2/halo2_proofs"}
+halo2_gadgets = {path = "/Users/cheechyuanang/Documents/repo/halo2/halo2_gadgets"}
+halo2_proofs = {path = "/Users/cheechyuanang/Documents/repo/halo2/halo2_proofs"}
 plotters = {version = "0.3.0", optional = true}
 rand_core = {version = "0.6", default-features = false, features = ["getrandom"]}
 sha2 = "0.10.6"
