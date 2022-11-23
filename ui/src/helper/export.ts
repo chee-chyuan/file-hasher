@@ -1,6 +1,6 @@
 import { saveAs } from 'file-saver';
 
-export const ExportCertificateCSV = (key: string[], value: string[]) => {
+export const exportCertificateCSV = (key: string[], value: string[]) => {
     const rows = [
         key, value
     ];
