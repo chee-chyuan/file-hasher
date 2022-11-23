@@ -8,6 +8,7 @@ import { Remote } from "comlink";
 import { FileHasher } from "../file-hasher.worker";
 import { useAccount } from 'wagmi'
 import fileHashContractDetails from "../artifacts/contracts/FileHash.sol/FileHash.json"
+import { convertStringToU32 } from "../utils/sha256-conversion";
 
 export type VerifyProps = {
   wasmWorkerApi: Remote<FileHasher>;
@@ -35,15 +36,12 @@ export default function Verify({ wasmWorkerApi }: VerifyProps) {
     reader.readAsText(e.target?.files[0]);
   }
   const verifyProof = async (wasmWorkerApi: Remote<FileHasher>, address: string, jsonFileContet: JsonFileContentType) => {
-    console.log("Contract address is ", process.env.REACT_APP_PUBLIC_CONTRACT_ADDRESS);
-    console.log("REACT_APP_PUBLIC_ALCHEMY_API_KEY is ", process.env.REACT_APP_ALCHEMY_API_KEY);
     const contract = new ethers.Contract(process.env.REACT_APP_PUBLIC_CONTRACT_ADDRESS!, fileHashContractDetails.abi, new ethers.providers.AlchemyProvider("goerli", process.env.REACT_APP_ALCHEMY_API_KEY))
     const currIndex = await contract.ringBufferIndexes(address)
     const commitmentHash = await contract.fileHashRingBuffers(address, currIndex);
-    const verifyResult = await wasmWorkerApi.verifyProof(jsonFileContet.proof, jsonFileContet.selectedRow, jsonFileContet.selectedContent, commitmentHash);
+    const verifyResult = await wasmWorkerApi.verifyProof(convertStringToU32(jsonFileContet.proof), jsonFileContet.selectedRow, jsonFileContet.selectedContent, commitmentHash.toString());
     alert(verifyResult);
     console.log("verifyResults: ", verifyResult);
-    // return { verifyResult }
   }
   if (!isConnected) return (
     <Center>
