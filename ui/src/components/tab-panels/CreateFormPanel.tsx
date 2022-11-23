@@ -8,6 +8,7 @@ import { useAccount } from "wagmi";
 import { FileHash__factory } from "../../typechain-types";
 import { isAddress } from "ethers/lib/utils.js";
 import { AppConfig } from "../../app-config";
+import { exportCertificateCSV } from "../../helper/export";
 
 type RowDatas = {
   rowTitles: string[];
@@ -59,6 +60,9 @@ export const CreateFormPanel = ({ wasmWorkerApi }: CreateFormPanelProps) => {
 
         setLoadingMessage("Submitting commitment...");
         await submitCommitment(targetAddress, commitment);
+
+        setLoadingMessage("Exporting certificate...");
+        exportCertificateCSV(rowData.rowTitles, rowData.rowValues);
 
         setIsLoading(false);
         return toast({
