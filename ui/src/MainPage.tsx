@@ -6,8 +6,6 @@ import {
   Tab,
   TabPanel,
 } from "@chakra-ui/react";
-import { ethers } from "ethers";
-import { useEffect, useState } from "react";
 import { Navbar } from "./components";
 import { FileHasher } from "./file-hasher.worker";
 import { Remote } from "comlink";
