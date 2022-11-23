@@ -11,7 +11,7 @@ import { FileHasher } from "./file-hasher.worker";
 import { Remote } from "comlink";
 import { CreateFormPanel } from "./components/tab-panels/CreateFormPanel";
 import { GenerateProofPanel } from "./components/tab-panels/GenerateProofPanel";
-import { VerifyProofPanel } from "./components/tab-panels/VerifyProofPanel";
+import { VerifyFormPanel } from "./components/tab-panels/VerifyFormPanel";
 
 export type MainPageProps = {
   wasmWorkerApi: Remote<FileHasher>;
@@ -48,7 +48,7 @@ export const MainPage = ({ wasmWorkerApi }: MainPageProps) => {
               <GenerateProofPanel />
             </TabPanel>
             <TabPanel>
-              <VerifyProofPanel />
+              <VerifyFormPanel wasmWorkerApi={wasmWorkerApi} />
             </TabPanel>
           </TabPanels>
         </Tabs>
