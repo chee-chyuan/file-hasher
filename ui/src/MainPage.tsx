@@ -5,16 +5,14 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  Button,
 } from "@chakra-ui/react";
-import { ethers } from "ethers";
-import { useEffect, useState } from "react";
 import { Navbar } from "./components";
-import { FlexibleFormTable } from "./components/tables/FlexibleFormTable";
-import FileUpload from "./components/FileUpload";
 import { FileHasher } from "./file-hasher.worker";
 import Verify from "./components/VerifyPage";
 import { Remote } from "comlink";
+import { CreateFormPanel } from "./components/tab-panels/CreateFormPanel";
+import { GenerateProofPanel } from "./components/tab-panels/GenerateProofPanel";
+import { VerifyProofPanel } from "./components/tab-panels/VerifyProofPanel";
 
 export type MainPageProps = {
   wasmWorkerApi: Remote<FileHasher>;
@@ -42,13 +40,13 @@ export const MainPage = ({ wasmWorkerApi }: MainPageProps) => {
             <Tab>Verify Proof</Tab>
           </TabList>
 
+          {/* Content */}
           <TabPanels>
             <TabPanel>
-              <FlexibleFormTable />
-              <FileUpload />
+              <CreateFormPanel />
             </TabPanel>
             <TabPanel>
-              <p>two!</p>
+              <GenerateProofPanel />
             </TabPanel>
             <TabPanel>
               <Verify wasmWorkerApi={wasmWorkerApi}/>

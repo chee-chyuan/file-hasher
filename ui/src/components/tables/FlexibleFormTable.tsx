@@ -7,11 +7,12 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
   Button,
   Input,
   IconButton,
+  Flex,
+  Spacer,
 } from "@chakra-ui/react";
 
 export type FlexibleFormTableProps = {
@@ -73,12 +74,16 @@ export const FlexibleFormTable = ({
   return (
     <TableContainer>
       <form>
-        <Table variant="simple">
+        <Table variant="simple" size="lg">
           <Thead>
             <Tr>
               <Th>Keys</Th>
               <Th>Value</Th>
-              <Th>{/* Action */}</Th>
+              <Th>
+                <Button rightIcon={<AddIcon />} onClick={addEditableRow}>
+                  Add row
+                </Button>
+              </Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -108,17 +113,6 @@ export const FlexibleFormTable = ({
               </Tr>
             ))}
           </Tbody>
-          <TableCaption>
-            <Button
-              width="full"
-              size="lg"
-              colorScheme="blue"
-              rightIcon={<AddIcon />}
-              onClick={addEditableRow}
-            >
-              Add new row
-            </Button>
-          </TableCaption>
         </Table>
       </form>
     </TableContainer>
