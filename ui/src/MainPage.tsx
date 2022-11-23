@@ -13,6 +13,7 @@ import { Navbar } from "./components";
 import { FlexibleFormTable } from "./components/tables/FlexibleFormTable";
 import FileUpload from "./components/FileUpload";
 import { FileHasher } from "./file-hasher.worker";
+import Verify from "./components/VerifyPage";
 import { Remote } from "comlink";
 
 export type MainPageProps = {
@@ -50,7 +51,7 @@ export const MainPage = ({ wasmWorkerApi }: MainPageProps) => {
               <p>two!</p>
             </TabPanel>
             <TabPanel>
-              <p>three!</p>
+              <Verify wasmWorkerApi={wasmWorkerApi}/>
             </TabPanel>
           </TabPanels>
         </Tabs>

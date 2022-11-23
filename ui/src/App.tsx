@@ -70,6 +70,8 @@ const App = () => {
         rowContent
       );
       const proof = await workerApi.getProof(rowTitles, rowContent, 0);
+      console.log("Commitment hash ", fileCommitmentHex);
+      console.log("Proof ", proof);
       const verifyResult = await workerApi.verifyProof(
         proof,
         "1",
