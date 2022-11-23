@@ -1,7 +1,9 @@
+import FileUpload from "../FileUpload";
+
 export const VerifyProofPanel = () => {
   return (
     <>
-      <p>three!</p>
+      <FileUpload />
     </>
   );
 };

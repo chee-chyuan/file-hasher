@@ -1,5 +1,5 @@
 import FileUpload from "../FileUpload";
-import { RowSelectTable } from "../tables/RowSelectTable";
+import { RowSelectTable } from "../tables";
 
 export const GenerateProofPanel = () => {
   return (
