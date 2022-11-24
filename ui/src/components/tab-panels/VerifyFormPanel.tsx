@@ -19,6 +19,7 @@ import { useAccount } from "wagmi";
 import fileHashContractDetails from "../../artifacts/contracts/FileHash.sol/FileHash.json";
 import { convertStringToU32 } from "../../utils/sha256-conversion";
 import { FileHasherProps } from "../../file-hasher-types";
+import { WarningNoWallet } from "../WarningNoWallet";
 
 export type JsonFileContentType = {
   selectedRowTitle: string;
@@ -71,9 +72,7 @@ export function VerifyFormPanel({ wasmWorkerApi }: FileHasherProps) {
   };
   if (!isConnected)
     return (
-      <Center>
-        <Text>Please Connect wallet to proceed</Text>
-      </Center>
+      <WarningNoWallet />
     );
   return (
     <>
