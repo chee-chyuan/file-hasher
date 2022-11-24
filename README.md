@@ -61,6 +61,10 @@ The public inputs consist of the file commitment and the information of the sele
 
 The private inputs will be the content of the entire document and also the `selector_index`, displayed as an array of ones and zeros. One representing the selected row.
 
+### Concurrency management
+As our solution is designed to be generic, there may be cases whereby the committed hash changes rather often. As a result, while the prover takes time to generate proof on a commited hash, a new hash overwrites the hash and this will cause the proof verification to fail.
+As such, we design a ring buffer data structure to store the commited hash and the verifier is allowed to query the commited hash up to a certain history depth
+
 ### Circuit explanation
 The private inputs is hashed and is contrainted to the file commitment (public input). This ensure that the file is not tampered.
 
