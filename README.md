@@ -49,6 +49,12 @@ We perform a double hashing mechanism (i.e horizontal and vertical).
 The horizontal hashing hashes the title and content row by row, producing a resultant hash for that row as seen in `Horizontal Result` above.
 
 #### Vertical hashing
+| Horizontal Result|
+| --- |
+|  hash_row_1 |
+| hash_row_2 |
+|  ... |
+| <final accumulated> |
 
 The vertical hashing acts like an accumulator for the horizontal hashing. 
 It takes the first two rows, hashes them together and results in the current accumulator. The current accumulator is hashed with the following row and returns the most recent accumulator result. The process repeats until all rows have been hashed.
