@@ -10,9 +10,12 @@ import { Navbar } from "./components";
 import { CreateFormPanel } from "./components/tab-panels/CreateFormPanel";
 import { GenerateProofPanel } from "./components/tab-panels/GenerateProofPanel";
 import { VerifyFormPanel } from "./components/tab-panels/VerifyFormPanel";
+import { WarningNoWallet } from "./components/WarningNoWallet";
 import { FileHasherProps } from "./file-hasher-types";
+import { useAccount } from "wagmi";
 
 export const MainPage = ({ wasmWorkerApi }: FileHasherProps) => {
+  const { isConnected } = useAccount();
   return (
     <>
       <Flex
@@ -37,13 +40,19 @@ export const MainPage = ({ wasmWorkerApi }: FileHasherProps) => {
           {/* Content */}
           <TabPanels>
             <TabPanel>
-              <CreateFormPanel wasmWorkerApi={wasmWorkerApi} />
+              {!isConnected ?
+                <WarningNoWallet /> :
+                <CreateFormPanel wasmWorkerApi={wasmWorkerApi} />}
             </TabPanel>
             <TabPanel>
-              <GenerateProofPanel wasmWorkerApi={wasmWorkerApi} />
+              {!isConnected ?
+                <WarningNoWallet /> :
+                <GenerateProofPanel wasmWorkerApi={wasmWorkerApi} />}
             </TabPanel>
             <TabPanel>
-              <VerifyFormPanel wasmWorkerApi={wasmWorkerApi} />
+              {!isConnected ?
+                <WarningNoWallet /> :
+                <VerifyFormPanel wasmWorkerApi={wasmWorkerApi} />}
             </TabPanel>
           </TabPanels>
         </Tabs>

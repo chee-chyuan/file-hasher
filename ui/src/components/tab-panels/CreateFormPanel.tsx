@@ -8,7 +8,6 @@ import { isAddress } from "ethers/lib/utils.js";
 import { AppConfig } from "../../app-config";
 import { exportCertificateCSV } from "../../helper/file-exports";
 import { FileHasherProps } from "../../file-hasher-types";
-import { WarningNoWallet } from "../WarningNoWallet";
 
 type RowDatas = {
   rowTitles: string[];
@@ -106,10 +105,7 @@ export const CreateFormPanel = ({ wasmWorkerApi }: FileHasherProps) => {
     const tx = await contract.commitFileHash(targetAddress, commitment);
     return tx.wait();
   };
-  if (!isConnected)
-    return (
-      <WarningNoWallet />
-    );
+
   return (
     <BaseContainer>
       <Stack padding="6" spacing="12">

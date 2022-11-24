@@ -87,12 +87,6 @@ export const GenerateProofPanel = ({ wasmWorkerApi }: FileHasherProps) => {
       });
     }
   };
-  if (!isConnected)
-    return (
-      <Center>
-        <Text>Please Connect wallet to proceed</Text>
-      </Center>
-    );
   return (
     <BaseContainer>
       <Stack padding="6" spacing="12" alignItems="center" w="100%">
