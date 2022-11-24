@@ -61,28 +61,11 @@ const App = () => {
   }, [worker]);
 
   useEffect(() => {
-    const testAllFlow = async () => {
-      const rowTitles = ["1", "1", "1", "1", "1", "1", "1", "1", "1", "1"];
-      const rowContent = ["1", "1", "1", "1", "1", "1", "1", "1", "1", "1"];
+    const asyncFn = async () => {
       await workerApi.initialize();
-
-      const fileCommitmentHex = await workerApi.getFileCommitment(
-        rowTitles,
-        rowContent
-      );
-      const proof = await workerApi.getProof(rowTitles, rowContent, 0);
-      console.log("Commitment hash ", fileCommitmentHex);
-      console.log("Proof ", proof);
-      const verifyResult = await workerApi.verifyProof(
-        proof,
-        "1",
-        "1",
-        fileCommitmentHex
-      );
-      console.log("verify result is ", verifyResult);
     };
     if (worker && workerApi) {
-      testAllFlow();
+      asyncFn();
     }
   }, [worker, workerApi]);
 
