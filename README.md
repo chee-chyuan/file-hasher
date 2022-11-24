@@ -1,4 +1,8 @@
 # Zk Form
+## Deployment link
+https://zkform.vercel.app/
+file-hasher-78c055.spheron.app
+
 ## Problem Statement
 Here we have our health certificate. On it, it records our blood type, blood sugar level, medical history and many other health information, some may be too personal to share it to anyone. 
 
