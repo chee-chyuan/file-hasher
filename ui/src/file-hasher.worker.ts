@@ -94,6 +94,7 @@ export class FileHasher {
       selectedRowU32,
       proof
     );
+
     return verifyResult;
   }
 }

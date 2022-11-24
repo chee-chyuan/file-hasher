@@ -1,6 +1,5 @@
-import { Input, useMultiStyleConfig } from "@chakra-ui/react";
-import * as React from "react";
-import { ethers } from "ethers";
+import { Input, useMultiStyleConfig, useToast } from "@chakra-ui/react";
+import React, { useState } from "react";
 import {
   Card,
   CardHeader,
@@ -13,12 +12,11 @@ import {
   Button,
   Center,
 } from "@chakra-ui/react";
-import { Remote } from "comlink";
-import { FileHasher } from "../../file-hasher.worker";
 import { useAccount } from "wagmi";
-import fileHashContractDetails from "../../artifacts/contracts/FileHash.sol/FileHash.json";
-import { convertStringToU32 } from "../../utils/sha256-conversion";
+
 import { FileHasherProps } from "../../file-hasher-types";
+import { FileHash__factory } from "../../typechain-types";
+import { BaseContainer } from "../containers";
 
 export type JsonFileContentType = {
   selectedRowTitle: string;
@@ -27,48 +25,83 @@ export type JsonFileContentType = {
 };
 
 export function VerifyFormPanel({ wasmWorkerApi }: FileHasherProps) {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, connector } = useAccount();
+  const toast = useToast();
+
   const styles = useMultiStyleConfig("Button", { variant: "outline" });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [jsonFileContent, setJsonFileContent] =
-    React.useState<JsonFileContentType>();
+    React.useState<Record<string, string>>();
 
   const uploadFile = async function (e: any) {
     const reader = new FileReader();
     reader.onload = async (e: any) => {
-      console.log(e);
       const result = e?.target?.result;
       const jsonResult = JSON.parse(result);
       setJsonFileContent(jsonResult);
     };
     reader.readAsText(e.target?.files[0]);
   };
-  const verifyProof = async (
-    wasmWorkerApi: Remote<FileHasher>,
-    address: string,
-    jsonFileContet: JsonFileContentType
-  ) => {
-    const contract = new ethers.Contract(
+
+  const onVerifyProof = async () => {
+    setIsLoading(true);
+    if (!address || !connector) {
+      return toast({
+        title: "Unable to get address or connector",
+        description:
+          "Unable to get address or connector. Please try to reconnect.",
+        isClosable: true,
+        status: "error",
+      });
+    }
+
+    const contract = FileHash__factory.connect(
       process.env.REACT_APP_PUBLIC_CONTRACT_ADDRESS!,
-      fileHashContractDetails.abi,
-      new ethers.providers.AlchemyProvider(
-        "goerli",
-        process.env.REACT_APP_ALCHEMY_API_KEY
-      )
+      await connector.getSigner()
     );
-    const currIndex = await contract.ringBufferIndexes(address);
+
+    const ringBuffer = [0, 1, 2, 3, 4];
+    const nextIndex = await contract.ringBufferIndexes(address);
+
+    const currIndex = ringBuffer[nextIndex - 1] ?? 4;
+
     const commitmentHash = await contract.fileHashRingBuffers(
       address,
       currIndex
     );
-    const verifyResult = await wasmWorkerApi.verifyProof(
-      convertStringToU32(jsonFileContet.proof),
-      jsonFileContet.selectedRowTitle,
-      jsonFileContet.selectedRowContent,
-      commitmentHash.toString()
-    );
-    alert(verifyResult);
-    console.log("verifyResults: ", verifyResult);
+
+    if (
+      jsonFileContent &&
+      jsonFileContent.proof &&
+      jsonFileContent.selectedRowTitle &&
+      jsonFileContent.selectedRowContent
+    ) {
+      const verifyResult = await wasmWorkerApi.verifyProof(
+        jsonFileContent.proof,
+        jsonFileContent.selectedRowTitle,
+        jsonFileContent.selectedRowContent,
+        commitmentHash.toHexString()
+      );
+
+      setIsLoading(false);
+      return toast({
+        title: "Verification Result",
+        description: `The proof is verified to be ${verifyResult}.`,
+        status: "success",
+        isClosable: true,
+      });
+    }
+
+    setIsLoading(false);
+    return toast({
+      title: "Invalid proof.json format",
+      description: "The provided proof.json file is in an invalid format.",
+      status: "error",
+      isClosable: true,
+    });
   };
+
   if (!isConnected)
     return (
       <Center>
@@ -153,9 +186,9 @@ export function VerifyFormPanel({ wasmWorkerApi }: FileHasherProps) {
                 <Button
                   colorScheme="blue"
                   size="lg"
-                  onClick={() =>
-                    verifyProof(wasmWorkerApi, address, jsonFileContent)
-                  }
+                  loadingText="Verifying the proof..."
+                  isLoading={isLoading}
+                  onClick={onVerifyProof}
                 >
                   Verify Proof
                 </Button>
