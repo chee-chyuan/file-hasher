@@ -14,25 +14,20 @@ import {
 export type RowSelectTableProps = {
   rowTitles?: string[];
   rowValues?: string[];
-  onChange?: (nextVal: string) => any;
+  selectedRow: number;
+  onChange: (nextVal: string) => void;
 };
 
 export const RowSelectTable = ({
   rowTitles = [],
   rowValues = [],
+  selectedRow,
   onChange = () => {},
 }: RowSelectTableProps) => {
-  const [selectedRow, setSelectedRow] = useState(rowTitles[0]);
-
-  const onRowSelected = (nextVal: string) => {
-    setSelectedRow(nextVal);
-    onChange(nextVal);
-  };
-
   return (
     <TableContainer w="100%">
       <form>
-        <RadioGroup value={selectedRow} onChange={onRowSelected}>
+        <RadioGroup value={selectedRow} onChange={onChange}>
           <Table variant="simple" size="lg">
             <Thead>
               <Tr>
@@ -47,7 +42,7 @@ export const RowSelectTable = ({
                   <Td>{row}</Td>
                   <Td>{rowValues[idx]}</Td>
                   <Td>
-                    <Radio value={row} />
+                    <Radio value={idx} />
                   </Td>
                 </Tr>
               ))}

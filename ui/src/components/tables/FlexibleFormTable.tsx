@@ -11,15 +11,10 @@ import {
   Input,
   IconButton,
 } from "@chakra-ui/react";
+import { RowData } from "../../file-hasher-types";
 
 export type FlexibleFormTableProps = {
-  onChange?: ({
-    rowTitles,
-    rowValues,
-  }: {
-    rowTitles: string[];
-    rowValues: string[];
-  }) => any;
+  onChange?: ({ rowTitles, rowValues }: RowData) => any;
 };
 
 export const FlexibleFormTable = ({
