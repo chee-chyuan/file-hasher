@@ -62,9 +62,10 @@ const App = () => {
 
   useEffect(() => {
     const testAllFlow = async () => {
-      const rowTitles = ["1", "1"];
-      const rowContent = ["1", "1"];
+      const rowTitles = ["1", "1", "1", "1", "1", "1", "1", "1", "1", "1"];
+      const rowContent = ["1", "1", "1", "1", "1", "1", "1", "1", "1", "1"];
       await workerApi.initialize();
+
       const fileCommitmentHex = await workerApi.getFileCommitment(
         rowTitles,
         rowContent
@@ -81,7 +82,6 @@ const App = () => {
       console.log("verify result is ", verifyResult);
     };
     if (worker && workerApi) {
-      workerApi.initialize();
       testAllFlow();
     }
   }, [worker, workerApi]);

@@ -1,25 +1,20 @@
 import { Button, Input, Stack, useToast } from "@chakra-ui/react";
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import type { Remote } from "comlink";
-import type { FileHasher } from "../../file-hasher.worker";
+import { ChangeEvent, useState } from "react";
 import { BaseContainer } from "../containers";
 import { FlexibleFormTable } from "../tables";
 import { useAccount } from "wagmi";
 import { FileHash__factory } from "../../typechain-types";
 import { isAddress } from "ethers/lib/utils.js";
 import { AppConfig } from "../../app-config";
-import { exportCertificateCSV } from "../../helper/export";
+import { exportCertificateCSV } from "../../helper/file-exports";
+import { FileHasherProps } from "../../file-hasher-types";
 
 type RowDatas = {
   rowTitles: string[];
   rowValues: string[];
 };
 
-type CreateFormPanelProps = {
-  wasmWorkerApi: Remote<FileHasher>;
-};
-
-export const CreateFormPanel = ({ wasmWorkerApi }: CreateFormPanelProps) => {
+export const CreateFormPanel = ({ wasmWorkerApi }: FileHasherProps) => {
   const { address, connector } = useAccount();
 
   const [rowData, setRowData] = useState<RowDatas>({

@@ -18,10 +18,7 @@ import { FileHasher } from "../../file-hasher.worker";
 import { useAccount } from "wagmi";
 import fileHashContractDetails from "../../artifacts/contracts/FileHash.sol/FileHash.json";
 import { convertStringToU32 } from "../../utils/sha256-conversion";
-
-export type VerifyProps = {
-  wasmWorkerApi: Remote<FileHasher>;
-};
+import { FileHasherProps } from "../../file-hasher-types";
 
 export type JsonFileContentType = {
   selectedRow: string;
@@ -29,7 +26,7 @@ export type JsonFileContentType = {
   proof: any;
 };
 
-export function VerifyFormPanel({ wasmWorkerApi }: VerifyProps) {
+export function VerifyFormPanel({ wasmWorkerApi }: FileHasherProps) {
   const { address, isConnected } = useAccount();
   const styles = useMultiStyleConfig("Button", { variant: "outline" });
   const [jsonFileContent, setJsonFileContent] =

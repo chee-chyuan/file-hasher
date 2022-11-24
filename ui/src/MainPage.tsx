@@ -7,17 +7,12 @@ import {
   TabPanel,
 } from "@chakra-ui/react";
 import { Navbar } from "./components";
-import { FileHasher } from "./file-hasher.worker";
-import { Remote } from "comlink";
 import { CreateFormPanel } from "./components/tab-panels/CreateFormPanel";
 import { GenerateProofPanel } from "./components/tab-panels/GenerateProofPanel";
 import { VerifyFormPanel } from "./components/tab-panels/VerifyFormPanel";
+import { FileHasherProps } from "./file-hasher-types";
 
-export type MainPageProps = {
-  wasmWorkerApi: Remote<FileHasher>;
-};
-
-export const MainPage = ({ wasmWorkerApi }: MainPageProps) => {
+export const MainPage = ({ wasmWorkerApi }: FileHasherProps) => {
   return (
     <>
       <Flex
@@ -45,7 +40,7 @@ export const MainPage = ({ wasmWorkerApi }: MainPageProps) => {
               <CreateFormPanel wasmWorkerApi={wasmWorkerApi} />
             </TabPanel>
             <TabPanel>
-              <GenerateProofPanel />
+              <GenerateProofPanel wasmWorkerApi={wasmWorkerApi} />
             </TabPanel>
             <TabPanel>
               <VerifyFormPanel wasmWorkerApi={wasmWorkerApi} />
