@@ -87,7 +87,6 @@ export const GenerateProofPanel = ({ wasmWorkerApi }: FileHasherProps) => {
       });
     }
   };
-
   return (
     <BaseContainer>
       <Stack padding="6" spacing="12" alignItems="center" w="100%">

@@ -5,7 +5,6 @@ import { FlexibleFormTable } from "../tables";
 import { useAccount } from "wagmi";
 import { FileHash__factory } from "../../typechain-types";
 import { isAddress } from "ethers/lib/utils.js";
-import { AppConfig } from "../../app-config";
 import { exportCertificateCSV } from "../../helper/file-exports";
 import { FileHasherProps } from "../../file-hasher-types";
 
