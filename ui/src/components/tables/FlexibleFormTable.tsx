@@ -10,15 +10,17 @@ import {
   TableContainer,
   Input,
   IconButton,
+  Button,
 } from "@chakra-ui/react";
 import { RowData } from "../../file-hasher-types";
+import React from "react";
 
 export type FlexibleFormTableProps = {
   onChange?: ({ rowTitles, rowValues }: RowData) => any;
 };
 
 export const FlexibleFormTable = ({
-  onChange = () => {},
+  onChange = () => { },
 }: FlexibleFormTableProps) => {
   /**
    * Combining these 2 states into an object would be a lot cleaner,
@@ -26,13 +28,13 @@ export const FlexibleFormTable = ({
    * of either states will trigger a rerendering of everything as well.
    * Isolating it should restrict rendering slightly (Although not much).
    */
-  const [rowTitles, setRowTitles] = useState(new Array(10).fill("0"));
-  const [rowValues, setRowValues] = useState(new Array(10).fill("0"));
+  const [rowTitles, setRowTitles] = useState([""]);
+  const [rowValues, setRowValues] = useState([""]);
 
-  // const addEditableRow = () => {
-  //   setRowTitles((prevRowTitles) => prevRowTitles.concat(""));
-  //   setRowValues((prevRowValues) => prevRowValues.concat(""));
-  // };
+  const addEditableRow = () => {
+    setRowTitles((prevRowTitles) => prevRowTitles.concat(""));
+    setRowValues((prevRowValues) => prevRowValues.concat(""));
+  };
 
   const removeEditableRow = (index: number) => {
     setRowTitles((prevRowTitles) =>
@@ -45,23 +47,23 @@ export const FlexibleFormTable = ({
 
   const onRowChange =
     (col: "title" | "value", index: number) =>
-    (event: ChangeEvent<HTMLInputElement>) => {
-      if (col === "title") {
-        setRowTitles((prevRowTitles) => {
-          const newTitles = [...prevRowTitles];
-          newTitles[index] = event.target.value;
-          onChange({ rowTitles: newTitles, rowValues });
-          return newTitles;
-        });
-      } else {
-        setRowValues((prevRowValues) => {
-          const newValues = [...prevRowValues];
-          newValues[index] = event.target.value;
-          onChange({ rowTitles, rowValues: newValues });
-          return newValues;
-        });
-      }
-    };
+      (event: ChangeEvent<HTMLInputElement>) => {
+        if (col === "title") {
+          setRowTitles((prevRowTitles) => {
+            const newTitles = [...prevRowTitles];
+            newTitles[index] = event.target.value;
+            onChange({ rowTitles: newTitles, rowValues });
+            return newTitles;
+          });
+        } else {
+          setRowValues((prevRowValues) => {
+            const newValues = [...prevRowValues];
+            newValues[index] = event.target.value;
+            onChange({ rowTitles, rowValues: newValues });
+            return newValues;
+          });
+        }
+      };
 
   return (
     <TableContainer>
@@ -72,9 +74,9 @@ export const FlexibleFormTable = ({
               <Th>Keys</Th>
               <Th>Value</Th>
               <Th>
-                {/* <Button rightIcon={<AddIcon />} onClick={addEditableRow}>
+                <Button rightIcon={<AddIcon />} onClick={addEditableRow}>
                   Add row
-                </Button> */}
+                </Button>
               </Th>
             </Tr>
           </Thead>

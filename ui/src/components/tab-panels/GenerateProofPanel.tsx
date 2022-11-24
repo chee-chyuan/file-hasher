@@ -64,10 +64,18 @@ export const GenerateProofPanel = ({ wasmWorkerApi }: FileHasherProps) => {
         isClosable: true,
       });
     }
+    // Hack for filling up to 10 inputs
+    let submitRowTitles = [...rowData.rowTitles];
+    let submitRowValues = [...rowData.rowValues];
+    if (rowData.rowTitles.length != 10 && rowData.rowValues.length != 10) {
+      const fillUpLength = 10 - rowData.rowTitles.length;
+      submitRowTitles = [...submitRowTitles, ...new Array(fillUpLength).fill("-")]
+      submitRowValues = [...submitRowValues, ...new Array(fillUpLength).fill("-")]
+    }
     try {
       const proof = await wasmWorkerApi.getProof(
-        rowData.rowTitles,
-        rowData.rowValues,
+        submitRowTitles,
+        submitRowValues,
         selectedRow
       );
       exportProofJson(
@@ -89,10 +97,8 @@ export const GenerateProofPanel = ({ wasmWorkerApi }: FileHasherProps) => {
   };
   return (
     <BaseContainer>
+      <FileUpload onFileUploaded={onFileUploaded} accept="text/csv" />
       <Stack padding="6" spacing="12" alignItems="center" w="100%">
-        <Box margin="auto">
-          <FileUpload onFileUploaded={onFileUploaded} accept="text/csv" />
-        </Box>
         {isUploaded ? (
           <Stack w="100%" spacing="12" margin="auto">
             <RowSelectTable
