@@ -99,7 +99,7 @@ export const CreateFormPanel = ({ wasmWorkerApi }: FileHasherProps) => {
       throw new Error("Signer not available.");
     }
     const contract = FileHash__factory.connect(
-      "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      process.env.REACT_APP_PUBLIC_CONTRACT_ADDRESS!,
       signer
     );
     const tx = await contract.commitFileHash(targetAddress, commitment);
