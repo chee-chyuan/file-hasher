@@ -20,7 +20,7 @@ export type FlexibleFormTableProps = {
 };
 
 export const FlexibleFormTable = ({
-  onChange = () => { },
+  onChange = () => {},
 }: FlexibleFormTableProps) => {
   /**
    * Combining these 2 states into an object would be a lot cleaner,
@@ -47,23 +47,23 @@ export const FlexibleFormTable = ({
 
   const onRowChange =
     (col: "title" | "value", index: number) =>
-      (event: ChangeEvent<HTMLInputElement>) => {
-        if (col === "title") {
-          setRowTitles((prevRowTitles) => {
-            const newTitles = [...prevRowTitles];
-            newTitles[index] = event.target.value;
-            onChange({ rowTitles: newTitles, rowValues });
-            return newTitles;
-          });
-        } else {
-          setRowValues((prevRowValues) => {
-            const newValues = [...prevRowValues];
-            newValues[index] = event.target.value;
-            onChange({ rowTitles, rowValues: newValues });
-            return newValues;
-          });
-        }
-      };
+    (event: ChangeEvent<HTMLInputElement>) => {
+      if (col === "title") {
+        setRowTitles((prevRowTitles) => {
+          const newTitles = [...prevRowTitles];
+          newTitles[index] = event.target.value;
+          onChange({ rowTitles: newTitles, rowValues });
+          return newTitles;
+        });
+      } else {
+        setRowValues((prevRowValues) => {
+          const newValues = [...prevRowValues];
+          newValues[index] = event.target.value;
+          onChange({ rowTitles, rowValues: newValues });
+          return newValues;
+        });
+      }
+    };
 
   return (
     <TableContainer>

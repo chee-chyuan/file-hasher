@@ -1,4 +1,4 @@
-import { Box, Button, Stack, useToast } from "@chakra-ui/react";
+import { Button, Stack, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { BaseContainer } from "../containers";
 import { FileUpload } from "../FileUpload";
@@ -67,10 +67,16 @@ export const GenerateProofPanel = ({ wasmWorkerApi }: FileHasherProps) => {
     // Hack for filling up to 10 inputs
     let submitRowTitles = [...rowData.rowTitles];
     let submitRowValues = [...rowData.rowValues];
-    if (rowData.rowTitles.length != 10 && rowData.rowValues.length != 10) {
+    if (rowData.rowTitles.length !== 10 && rowData.rowValues.length !== 10) {
       const fillUpLength = 10 - rowData.rowTitles.length;
-      submitRowTitles = [...submitRowTitles, ...new Array(fillUpLength).fill("-")]
-      submitRowValues = [...submitRowValues, ...new Array(fillUpLength).fill("-")]
+      submitRowTitles = [
+        ...submitRowTitles,
+        ...new Array(fillUpLength).fill("-"),
+      ];
+      submitRowValues = [
+        ...submitRowValues,
+        ...new Array(fillUpLength).fill("-"),
+      ];
     }
     try {
       const proof = await wasmWorkerApi.getProof(
