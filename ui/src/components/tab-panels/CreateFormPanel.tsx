@@ -48,9 +48,19 @@ export const CreateFormPanel = ({ wasmWorkerApi }: FileHasherProps) => {
     ) {
       try {
         setLoadingMessage("Creating commitment...");
+        // Hack for filling up to 10 inputs
+        let submitRowTitles = [...rowData.rowTitles];
+        let submitRowValues = [...rowData.rowValues];
+        if (rowData.rowTitles.length != 10 && rowData.rowValues.length != 10) {
+          const fillUpLength = 10 - rowData.rowTitles.length;
+          submitRowTitles = [...submitRowTitles, ...new Array(fillUpLength).fill("-")]
+          submitRowValues = [...submitRowValues, ...new Array(fillUpLength).fill("-")]
+        }
+        console.log("submitRowTitles: ", submitRowTitles)
+        console.log("submitRowValues: ", submitRowValues)
         const commitment = await wasmWorkerApi.getFileCommitment(
-          rowData.rowTitles,
-          rowData.rowValues
+          submitRowTitles,
+          submitRowValues
         );
 
         setLoadingMessage("Submitting commitment...");
@@ -133,6 +143,7 @@ export const CreateFormPanel = ({ wasmWorkerApi }: FileHasherProps) => {
             w="full"
             colorScheme="teal"
             onClick={onCreate}
+            disabled={rowData.rowTitles.filter((row, idx) => row != "-" && rowData.rowValues[idx] != "-").length == 0}
           >
             Create form
           </Button>
