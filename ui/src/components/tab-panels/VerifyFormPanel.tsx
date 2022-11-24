@@ -21,8 +21,8 @@ import { convertStringToU32 } from "../../utils/sha256-conversion";
 import { FileHasherProps } from "../../file-hasher-types";
 
 export type JsonFileContentType = {
-  selectedRow: string;
-  selectedContent: string;
+  selectedRowTitle: string;
+  selectedRowContent: string;
   proof: any;
 };
 
@@ -62,8 +62,8 @@ export function VerifyFormPanel({ wasmWorkerApi }: FileHasherProps) {
     );
     const verifyResult = await wasmWorkerApi.verifyProof(
       convertStringToU32(jsonFileContet.proof),
-      jsonFileContet.selectedRow,
-      jsonFileContet.selectedContent,
+      jsonFileContet.selectedRowTitle,
+      jsonFileContet.selectedRowContent,
       commitmentHash.toString()
     );
     alert(verifyResult);
@@ -124,7 +124,7 @@ export function VerifyFormPanel({ wasmWorkerApi }: FileHasherProps) {
                       Selected Row
                     </Heading>
                     <Text pt="2" fontSize="sm">
-                      {jsonFileContent.selectedRow}
+                      {jsonFileContent.selectedRowTitle}
                     </Text>
                   </Box>
                   <Box>
@@ -132,7 +132,7 @@ export function VerifyFormPanel({ wasmWorkerApi }: FileHasherProps) {
                       Selected Content
                     </Heading>
                     <Text pt="2" fontSize="sm">
-                      {jsonFileContent.selectedContent}
+                      {jsonFileContent.selectedRowContent}
                     </Text>
                   </Box>
                   <Box>
