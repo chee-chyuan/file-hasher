@@ -16,7 +16,6 @@ import { useAccount } from "wagmi";
 
 import { FileHasherProps } from "../../file-hasher-types";
 import { FileHash__factory } from "../../typechain-types";
-import { BaseContainer } from "../containers";
 
 export type JsonFileContentType = {
   selectedRowTitle: string;

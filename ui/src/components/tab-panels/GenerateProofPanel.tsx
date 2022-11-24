@@ -1,4 +1,4 @@
-import { Box, Button, Center, Stack, useToast, Text } from "@chakra-ui/react";
+import { Box, Button, Stack, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { BaseContainer } from "../containers";
 import { FileUpload } from "../FileUpload";
@@ -9,7 +9,7 @@ import { exportProofJson } from "../../helper/file-exports";
 import { useAccount } from "wagmi";
 
 export const GenerateProofPanel = ({ wasmWorkerApi }: FileHasherProps) => {
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
 
   const toast = useToast();
   const [isUploaded, setIsUploaded] = useState<boolean>(false);

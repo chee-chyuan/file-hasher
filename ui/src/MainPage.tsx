@@ -30,32 +30,31 @@ export const MainPage = ({ wasmWorkerApi }: FileHasherProps) => {
         gap={4}
       >
         <Navbar />
-        <Tabs>
-          <TabList>
-            <Tab>Create Form</Tab>
-            <Tab>Generate Proof</Tab>
-            <Tab>Verify Proof</Tab>
-          </TabList>
 
-          {/* Content */}
-          <TabPanels>
-            <TabPanel>
-              {!isConnected ?
-                <WarningNoWallet /> :
-                <CreateFormPanel wasmWorkerApi={wasmWorkerApi} />}
-            </TabPanel>
-            <TabPanel>
-              {!isConnected ?
-                <WarningNoWallet /> :
-                <GenerateProofPanel wasmWorkerApi={wasmWorkerApi} />}
-            </TabPanel>
-            <TabPanel>
-              {!isConnected ?
-                <WarningNoWallet /> :
-                <VerifyFormPanel wasmWorkerApi={wasmWorkerApi} />}
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+        {!isConnected ? (
+          <WarningNoWallet />
+        ) : (
+          <Tabs>
+            <TabList>
+              <Tab>Create Form</Tab>
+              <Tab>Generate Proof</Tab>
+              <Tab>Verify Proof</Tab>
+            </TabList>
+
+            {/* Content */}
+            <TabPanels>
+              <TabPanel>
+                <CreateFormPanel wasmWorkerApi={wasmWorkerApi} />
+              </TabPanel>
+              <TabPanel>
+                <GenerateProofPanel wasmWorkerApi={wasmWorkerApi} />
+              </TabPanel>
+              <TabPanel>
+                <VerifyFormPanel wasmWorkerApi={wasmWorkerApi} />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        )}
       </Flex>
     </>
   );

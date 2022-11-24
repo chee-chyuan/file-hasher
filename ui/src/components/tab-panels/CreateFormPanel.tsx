@@ -1,11 +1,10 @@
-import { Button, Center, Input, Stack, useToast, Text } from "@chakra-ui/react";
+import { Button, Input, Stack, useToast } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 import { BaseContainer } from "../containers";
 import { FlexibleFormTable } from "../tables";
 import { useAccount } from "wagmi";
 import { FileHash__factory } from "../../typechain-types";
 import { isAddress } from "ethers/lib/utils.js";
-import { AppConfig } from "../../app-config";
 import { exportCertificateCSV } from "../../helper/file-exports";
 import { FileHasherProps } from "../../file-hasher-types";
 
@@ -15,7 +14,7 @@ type RowDatas = {
 };
 
 export const CreateFormPanel = ({ wasmWorkerApi }: FileHasherProps) => {
-  const { address, isConnected, connector } = useAccount();
+  const { address, connector } = useAccount();
 
   const [rowData, setRowData] = useState<RowDatas>({
     rowTitles: [],
