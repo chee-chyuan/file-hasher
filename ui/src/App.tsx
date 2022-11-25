@@ -9,8 +9,15 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
-import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
+import {
+  Chain,
+  chain,
+  configureChains,
+  createClient,
+  WagmiConfig,
+} from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { theme } from "./styles";
 import { MainPage } from "./MainPage";
 
@@ -22,9 +29,28 @@ const { chains, provider } = configureChains(
     chain.polygonMumbai,
     chain.optimism,
     chain.arbitrum,
-    chain.localhost,
+    {
+      id: 534354,
+      name: "Scroll L2 Testnet",
+      testnet: true,
+      network: "scrolll2testnet",
+      rpcUrls: {
+        public: "https://prealpha.scroll.io/l2",
+        default: "https://prealpha.scroll.io/l2",
+      },
+    },
   ],
-  [publicProvider()]
+  [
+    publicProvider(),
+    jsonRpcProvider({
+      rpc: (curChain: Chain) => {
+        if (curChain.id === 534354) {
+          return { http: "https://prealpha.scroll.io/l2" };
+        }
+        return { http: chain.goerli.rpcUrls[0] };
+      },
+    }),
+  ]
 );
 
 const { connectors } = getDefaultWallets({
@@ -34,7 +60,7 @@ const { connectors } = getDefaultWallets({
 
 const wagmiClient = createClient({
   autoConnect: true,
-  connectors,
+  connectors: [...connectors()],
   provider,
 });
 
