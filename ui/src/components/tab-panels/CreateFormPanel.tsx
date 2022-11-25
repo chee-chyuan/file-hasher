@@ -154,7 +154,7 @@ export const CreateFormPanel = ({ wasmWorkerApi }: FileHasherProps) => {
             disabled={
               rowData.rowTitles.filter(
                 (row, idx) => row !== "-" && rowData.rowValues[idx] !== "-"
-              ).length === 0
+              ).length === 0 || isLoading
             }
           >
             Create form
