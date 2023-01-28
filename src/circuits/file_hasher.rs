@@ -418,6 +418,7 @@ mod tests {
 
         println!("accumulator_hash: {:?}", accumulator_hash);
         println!("row_accumulator: {:?}", row_accumulator);
+        let xx = 5;
 
         let public_input = vec![accumulator_hash, row_accumulator];
         const ROW_NUMBER: usize = 2;
