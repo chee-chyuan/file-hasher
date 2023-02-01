@@ -134,7 +134,7 @@ pub fn get_file_commitment_and_selected_row(
     row_content_js: JsValue,
     row_selector_js: JsValue,
 ) -> JsValue {
-    const ROW: usize = 10;
+    const ROW: usize = 20;
     let row_title_u32 = row_title_js.into_serde::<[[u32; 8]; ROW]>().unwrap();
     let row_content_u32 = row_content_js.into_serde::<[[u32; 8]; ROW]>().unwrap();
 
@@ -247,7 +247,7 @@ pub fn generate_proof(
     let k = 12;
     let params: Params<EqAffine> = Params::new(k);
 
-    const ROW: usize = 10;
+    const ROW: usize = 20;
     let row_title_u32 = row_title_js.into_serde::<[[u32; 8]; ROW]>().unwrap();
     let row_content_u32 = row_content_js.into_serde::<[[u32; 8]; ROW]>().unwrap();
 
@@ -348,7 +348,7 @@ pub fn verify_correct_selector(
     proof_js: JsValue,
 ) -> bool {
     // verify
-    const ROW_NUMBER: usize = 10;
+    const ROW_NUMBER: usize = 20;
 
     let k = 12;
     let params: Params<EqAffine> = Params::new(k);
