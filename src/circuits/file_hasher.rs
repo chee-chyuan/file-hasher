@@ -268,7 +268,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let k = 10;
+        let k = 20;
         let row_selector = [Fp::from(0), Fp::from(1)];
 
         let row_title = [
@@ -433,7 +433,7 @@ mod tests {
             row_selectors: [Value::unknown(); ROW_NUMBER],
         };
 
-        let k = 10;
+        let k = 20;
         let params: Params<EqAffine> = Params::new(k);
 
         let vk = keygen_vk(&params, &empty_circuit).expect("keygen_vk should not fail");
